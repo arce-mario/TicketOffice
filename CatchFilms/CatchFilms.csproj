@@ -114,6 +114,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\jquery.seat-charts.css" />
+    <Content Include="Content\css\style-seats.css" />
     <Content Include="Content\dummy\background%402x.jpg" />
     <Content Include="Content\dummy\background.jpg" />
     <Content Include="Content\dummy\figure%402x.jpg" />
@@ -174,22 +176,27 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\select%402x.png" />
     <Content Include="Content\images\select.png" />
-    <Content Include="Content\js\app.js" />
-    <Content Include="Content\js\ie-support\html5.js" />
-    <Content Include="Content\js\ie-support\pie.htc" />
-    <Content Include="Content\js\ie-support\respond.js" />
-    <Content Include="Content\js\jquery-1.11.1.min.js" />
-    <Content Include="Content\js\min\app-min.js" />
-    <Content Include="Content\js\min\plugins-min.js" />
-    <Content Include="Content\js\plugins.js" />
-    <Content Include="Content\style.css" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\ie-support\html5.js" />
+    <Content Include="Scripts\ie-support\pie.htc" />
+    <Content Include="Scripts\ie-support\respond.js" />
+    <Content Include="Scripts\jquery-1.11.1.min.js" />
+    <Content Include="Scripts\jquery.nicescroll.js" />
+    <Content Include="Scripts\jquery.seat-charts.js" />
+    <Content Include="Scripts\jquery.seat-charts.min.js" />
+    <Content Include="Scripts\min\app-min.js" />
+    <Content Include="Scripts\min\plugins-min.js" />
+    <Content Include="Scripts\plugins.js" />
+    <Content Include="Content\css\style-home.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\scripts.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PublicUserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -202,12 +209,13 @@
     <Content Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Content\js\jquery-1.11.1.min.map" />
+    <Content Include="Scripts\jquery-1.11.1.min.map" />
     <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
-    <Content Include="Views\Menu\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\PublicUser\SelectSeats.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -218,6 +226,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\AdminUser\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

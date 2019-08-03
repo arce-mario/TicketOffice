@@ -9,14 +9,13 @@ namespace CatchFilms
             bundles.Add(new StyleBundle("~/bundles/css")
                 .Include(
                 "~/Content/fonts/font-awesome.min.css",
-                "~/Content/style.css"
+                "~/Content/css/style-home.css"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/js")
                 .Include(
-                "~/Content/js/jquery-1.11.1.min.js",
-                "~/Content/js/plugins.js",
-                "~/Content/js/app.js"));
+                "~/Scripts/plugins.js",
+                "~/Scripts/app.js"));
 
         }
     }

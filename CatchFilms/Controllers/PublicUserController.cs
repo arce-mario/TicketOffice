@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
 {
-    public class MenuController : Controller
+    public class PublicUserController : Controller
     {
-        // GET: Menu
-        public ActionResult Index()
+        // GET: SelectSeats
+        public ActionResult SelectSeats()
         {
             return View();
         }
