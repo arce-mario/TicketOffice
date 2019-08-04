@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiCatchFilms.Models
 {
@@ -16,5 +15,6 @@ namespace ApiCatchFilms.Models
         public int column { get; set; }
         [Required]
         public char row { get; set; }
+        public ICollection<RoomSeat> roomSeats { get; set; }
     }
 }
