@@ -99,6 +99,10 @@
     </Compile>
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\Price.cs" />
+    <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\Room_seat.cs" />
+    <Compile Include="Models\Seat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
