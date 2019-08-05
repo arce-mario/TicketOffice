@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace ApiCatchFilms.Models
 {
     public class User
     {
+
         [Column("user_id")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -38,7 +38,7 @@ namespace ApiCatchFilms.Models
         public DateTime birthDate { get; set; }
         [Required]
         public int rol { get; set; }
-
-        public virtual ICollection<Ticket> tickets { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<Ticket> tickets { get; set; }
     }
 }

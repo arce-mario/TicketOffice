@@ -11,11 +11,10 @@ namespace ApiCatchFilms.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //Las dos etiquetas de arriba son necesarias para defiir que el atributo movieID es una llave primaria autoincrementable
-        [Column("movie_id")] //permite especificar que en la base de datos movieID tendrá un nombre distinto en este caso movie_id
+        [Column("movie_id")]
         public int movieID {get; set;}
-        [Required]// represnta el not null
-        [StringLength(30)]//Define la cantidad de carctares de la cadena en la base de datos sería equivalente a nvarchar(30)
+        [Required]
+        [StringLength(30)]
         public string name { get; set; }
         [Required]
         [StringLength(30)]

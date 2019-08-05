@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,7 +18,7 @@ namespace ApiCatchFilms.Models
         public int number { get; set; }
         [StringLength(500)]
         public String description { get; set; }
-        public virtual ICollection<Function> functions { get; set; }
-        public virtual ICollection<RoomSeat> roomSeats { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<Function> functions { get; set; }
     }
 }

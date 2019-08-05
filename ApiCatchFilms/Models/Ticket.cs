@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,9 +28,13 @@ namespace ApiCatchFilms.Models
         [Required]
         [Column("function_id")]
         public int functionID { get; set; }
-        public virtual RoomSeat roomSeat { get; set; }
-        public virtual Function function { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public RoomSeat roomSeat { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Function function { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Price price { get; set; }
-        public virtual User user { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public User user { get; set; }
     }
 }

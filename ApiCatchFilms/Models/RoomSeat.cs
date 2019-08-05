@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +22,10 @@ namespace ApiCatchFilms.Models
         public int seatID { get; set; }
         [Column("room_id")]
         public int roomID { get; set; }
-        public virtual Room room { get; set; }
-        public virtual Seat seat { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Room room { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Seat seat { get; set; }
     }
 }

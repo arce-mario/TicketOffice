@@ -15,6 +15,5 @@ namespace ApiCatchFilms.Models
         public int column { get; set; }
         [Required]
         public char row { get; set; }
-        public ICollection<RoomSeat> roomSeats { get; set; }
     }
 }

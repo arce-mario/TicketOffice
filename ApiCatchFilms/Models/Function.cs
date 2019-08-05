@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,8 +31,11 @@ namespace ApiCatchFilms.Models
         [StringLength(500)]
         [Required]
         public string description { get; set; }
-        public virtual Movie movie { get; set; }
-        public virtual Price price { get; set; }
-        public virtual Room room { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Movie movie { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Price price { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Room room { get; set; }
     }
 }
