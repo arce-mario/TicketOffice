@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -20,9 +18,7 @@ namespace ApiCatchFilms.Controllers
         // GET: api/Rooms
         public IQueryable<Room> GetRooms()
         {
-            return db.Rooms
-                .Include(r => r.functions)
-                .Where(r => r.functions.Any(f => f.time >=DateTime.Today));
+            return db.Rooms;
         }
 
         // GET: api/Rooms/5

@@ -18,7 +18,5 @@ namespace ApiCatchFilms.Models
         public int number { get; set; }
         [StringLength(500)]
         public String description { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<Function> functions { get; set; }
     }
 }

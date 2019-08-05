@@ -17,10 +17,7 @@ namespace ApiCatchFilms.Controllers
         // GET: api/Functions
         public IQueryable<Function> GetFunctions()
         {
-            return db.Functions
-                .Include(f => f.movie)
-                .Include(f => f.price)
-                .Include(f => f.room);
+            return db.Functions.Include(f => f.movie).Include(f => f.price).Include(f => f.room);
         }
 
         // GET: api/Functions/5
