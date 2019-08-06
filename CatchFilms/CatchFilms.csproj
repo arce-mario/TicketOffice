@@ -182,7 +182,6 @@
     <Content Include="Scripts\ie-support\pie.htc" />
     <Content Include="Scripts\ie-support\respond.js" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
-    <Content Include="Scripts\jquery.nicescroll.js" />
     <Content Include="Scripts\jquery.seat-charts.js" />
     <Content Include="Scripts\jquery.seat-charts.min.js" />
     <Content Include="Scripts\min\app-min.js" />
@@ -190,7 +189,6 @@
     <Content Include="Scripts\plugins.js" />
     <Content Include="Content\css\style-home.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\scripts.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -198,7 +196,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PublicUserController.cs" />
+    <Compile Include="Controllers\PublicController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,7 +223,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\PublicUser\SelectSeats.cshtml" />
+    <Content Include="Views\Public\SelectSeats.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -236,7 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AdminUser\" />
+    <Folder Include="Views\Administration\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

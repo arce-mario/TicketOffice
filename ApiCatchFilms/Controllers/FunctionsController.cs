@@ -10,6 +10,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
+    [Authorize]
     public class FunctionsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();

@@ -12,17 +12,11 @@ namespace ApiCatchFilms.Models
     {
       
         public int ticketID { get; set; }
-        
         public DateTime createAT { get; set; }
-       
         public int roomSeatID { get; set; }
-       
         public int priceID { get; set; }
-        
         public int userID { get; set; }
-        
         public int functionID { get; set; }
-
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public RoomSeat roomSeat { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

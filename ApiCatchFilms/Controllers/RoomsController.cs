@@ -12,6 +12,7 @@ using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/rooms")]
     public class RoomsController : ApiController
     {

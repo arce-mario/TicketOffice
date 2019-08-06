@@ -8,9 +8,7 @@ namespace ApiCatchFilms.Models
     {
        
         public int seatID { get; set; }
-        
         public int column { get; set; }
-        
         public char row { get; set; }
     }
 }

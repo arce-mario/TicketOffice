@@ -16,7 +16,6 @@ namespace CatchFilms
                 .Include(
                 "~/Scripts/plugins.js",
                 "~/Scripts/app.js"));
-
         }
     }
 }

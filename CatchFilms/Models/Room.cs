@@ -12,9 +12,7 @@ namespace ApiCatchFilms.Models
     {
        
         public int roomID { get; set; }
-        
-        public int number { get; set; }
-        
+        public int number { get; set; }        
         public String description { get; set; }
     }
 }

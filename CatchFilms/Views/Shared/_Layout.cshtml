@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
 
     <title>@ViewBag.Title</title>
-    <!-- Loading third party fonts -->
-    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+    <!-- Loading third party fonts 
+        <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     @Styles.Render("~/bundles/css");
     @Scripts.Render("~/Scripts/jquery-1.11.1.min.js");
 </head>
@@ -26,14 +27,14 @@
                 <div class="main-navigation">
                     <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                     <ul class="menu">
-                        <li class="menu-item current-menu-item"><a href="#">Home</a></li>
-                        <li class="menu-item"><a href="#">About</a></li>
-                        <li class="menu-item"><a href="#">Movie reviews</a></li>
-                        <li class="menu-item"><a href="#">Join us</a></li>
-                        <li class="menu-item"><a href="#">Contact</a></li>
+                        <li class="menu-item current-menu-item"><a href="#">Inicio</a></li>
+                        <li class="menu-item"><a href="#">Cartelera</a></li>
+                        <li class="menu-item"><a href="#">Proximamente</a></li>
+                        <li class="menu-item"><a href="#">Únete a nosotros</a></li>
+                        <li class="menu-item"><a href="#">Acerca de</a></li>
                     </ul> <!-- .menu -->
                     <form action="#" class="search-form">
-                        <input type="text" placeholder="Search...">
+                        <input id="search_movie" type="text" placeholder="Buscar...">
                         <button><i class="fa fa-search"></i></button>
                     </form>
                 </div> <!-- .main-navigation -->
@@ -105,11 +106,12 @@
                         </div>
                     </div>
                 </div> <!-- .row -->
-                <div class="colophon">Copyright 2014 Company name, Designed by Themezy. All rights reserved</div>
+                <div class="colophon">Copyright 2019 CatchFilms, Universidad Centroamricana UCA. Todos los derechos reservados</div>
             </div> <!-- .container -->
         </footer>
     </div>
     <!-- Default snippet for navigation -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     @Scripts.Render("~/bundles/js");
 </body>
 </html>

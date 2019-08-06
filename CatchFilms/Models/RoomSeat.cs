@@ -13,13 +13,9 @@ namespace ApiCatchFilms.Models
     {
         
         public int roomSeatID { get; set; }
-       
         public int status { get; set; }
-       
         public int seatID { get; set; }
-        
         public int roomID { get; set; }
-
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Room room { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

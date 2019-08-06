@@ -1,7 +1,6 @@
 (function($, document, window){
 	
 	$(document).ready(function(){
-
 		// Cloning main navigation for mobile menu
 		$(".mobile-navigation").append($(".main-navigation .menu").clone());
 
@@ -11,12 +10,16 @@
 		});
 		$(".search-form button").click(function(){
 			$(this).toggleClass("active");
-			var $parent = $(this).parent(".search-form");
+            var $parent = $(this).parent(".search-form");
+            $parent.find("input").toggleClass("active").focus();
 
-			$parent.find("input").toggleClass("active").focus();
+            if($(this).hasClass("active")) {
+                console.log("Activa...");
+            } else {
+                console.log("Inactiva...");
+            }
 		});
-
-
+        
 		$(".slider").flexslider({
 			controlNav: false,
 			prevText:'<i class="fa fa-chevron-left"></i>',

@@ -13,6 +13,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
+    [Authorize]
     public class PricesController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();

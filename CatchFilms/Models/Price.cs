@@ -8,11 +8,8 @@ namespace ApiCatchFilms.Models
     {
        
         public int priceID { get; set; }
-       
         public decimal adultPrice { set; get; }
-        
         public decimal childPrice { get; set; }
-       
         public decimal oldManPrice { get; set; }
     }
 }
