@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\jquery.seat-charts.css" />
+    <Content Include="Content\css\login.css" />
     <Content Include="Content\css\style-seats.css" />
     <Content Include="Content\dummy\background%402x.jpg" />
     <Content Include="Content\dummy\background.jpg" />
@@ -226,6 +227,7 @@
     <Content Include="Views\Public\SelectSeats.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\SignUp.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
