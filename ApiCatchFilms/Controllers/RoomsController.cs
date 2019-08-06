@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
+using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
+    [RoutePrefix("api/rooms")]
     public class RoomsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -21,6 +23,12 @@ namespace ApiCatchFilms.Controllers
             return db.Rooms;
         }
 
+        [Route("{id:int}/functions")]
+        [ResponseType(typeof(IQueryable<Function>))]
+        public IQueryable<Function> GetFunctions(int id)
+        {
+            return db.Functions.Where(f => (f.functionID == id && f.time >= DateTime.UtcNow));
+        }
         // GET: api/Rooms/5
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> GetRoom(int id)

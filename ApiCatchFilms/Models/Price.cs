@@ -11,8 +11,13 @@ namespace ApiCatchFilms.Models
         [Column("price_id")]
         public int priceID { get; set; }
         [Required]
-        public int type { get; set; }
+        [Column("adult_price")]
+        public decimal adultPrice { set; get; }
         [Required]
-        public decimal price { get; set; }
+        [Column("child_price")]
+        public decimal childPrice { get; set; }
+        [Required]
+        [Column("old_man_price")]
+        public decimal oldManPrice { get; set; }
     }
 }

@@ -29,7 +29,6 @@ namespace ApiCatchFilms.Models
         [Required]
         public int typeMovie { get; set; }
         [StringLength(500)]
-        [Required]
         public string description { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Movie movie { get; set; }
