@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ApiCatchFilms.Controllers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace ApiCatchFilms
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.MessageHandlers.Add(new ValidarTokenHandler());
         }
     }
 }

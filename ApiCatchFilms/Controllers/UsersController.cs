@@ -13,6 +13,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
+    [Authorize(Roles = LoginController.ADMIN_ROL)]
     public class UsersController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();

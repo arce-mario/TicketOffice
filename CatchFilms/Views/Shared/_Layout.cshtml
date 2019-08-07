@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    int rol = 3;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +17,15 @@
     <style type="text/css">
         .links:link {
            text-decoration:none;
+        }
+        .avatar {
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .menu-item .dropdown-menu a{
+            padding: 7px 15px 7px 15px;
         }
     </style>
 </head>
@@ -32,11 +44,37 @@
                 <div class="main-navigation">
                     <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                     <ul class="menu">
-                        <li class="menu-item current-menu-item"><a class="links" href="#">Inicio</a></li>
+                        <li class="menu-item current-menu-item">
+                            @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "links" })
+                        </li>
                         <li class="menu-item"><a class="links" href="#">Cartelera</a></li>
                         <li class="menu-item"><a class="links" href="#">Próximamente</a></li>
                         <li class="menu-item"><a class="links" href="#">Acerca de</a></li>
-                        <li class="menu-item"><a class="links" href="#">Iniciar sesión</a></li>
+                        @if (rol == 3)
+                        {
+                            <li class="menu-item">@Html.ActionLink("Iniciar sesión", "login", new { controller = "home" }, new { @class = "links" })</li>
+                        }
+                        else
+                        {
+                            <li class="menu-item dropdown">
+                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">
+                                    Administrador
+                                </a>
+                                <br />
+                                <div class="dropdown-menu">
+                                    <div class="text-center" style="padding: 10px 0 10px 0">
+                                        <img src="http://simulacionymedicina.es/wp-content/uploads/2015/11/default-avatar-300x300-1.jpg" alt="Avatar" class="avatar avatar-48 img-circle">
+                                    </div>
+                                    <div class="text-center" style="padding-left: 15px; padding-right: 15px;">
+                                        <strong class="small">Mario Arce Díaz</strong>
+                                        <p class="small">marioarce402@gmail.com</p>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    @Html.ActionLink("Mi perfil", "profile", new { controller = "home" }, new { @class= "dropdown-item" })
+                                    @Html.ActionLink("Cerrar sesión", "login", new { controller = "home" }, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
                     </ul> <!-- .menu -->
                     <form class="search-form">
                         <input id="search_movie" type="text" placeholder="Buscar...">
@@ -116,8 +154,8 @@
         </footer>
     </div>
     <!-- Default snippet for navigation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
     @Scripts.Render("~/bundles/js");
 </body>
 </html>
