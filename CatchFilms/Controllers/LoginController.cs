@@ -1,8 +1,10 @@
 ﻿using CatchFilms.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -14,7 +16,7 @@ namespace CatchFilms.Controllers
     [SessionState(SessionStateBehavior.Default)]
     public class LoginController : Controller
     {
-        public const string BaseUrl = "http://192.168.43.37/apicatchfilms/";
+        public const string BaseUrl = "http://localhost:54642/";
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ValidateUser(LoginUser loginUser)
@@ -59,6 +61,51 @@ namespace CatchFilms.Controllers
 
                 ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear el nuevo registro");
                 return RedirectToAction("login", "home"); ;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SignUp(User user)
+        {
+            user.rol = 2;
+            user.userID = null;
+            user.hireDare = null;
+            Debug.WriteLine("usuario"+ JsonConvert.SerializeObject(user));
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri(BaseUrl);
+
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
+                    var postTask = client.PostAsJsonAsync<User>("api/users", user);
+
+                    postTask.Wait();
+                    var res = postTask.Result;
+
+                    if (res.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("index", "home");
+                    }
+                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToAction("unauthorized", "error");
+                    }
+
+                    Debug.WriteLine("ERROR: " + res.StatusCode);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERROR: " + e.Message);
+                }
+
+                ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear el nuevo registro");
+                return RedirectToAction("signup", "Home"); ;
             }
         }
     }
