@@ -1,8 +1,11 @@
 ﻿@{ 
     int rol = 3;
+    SessionData sessionData = (SessionData) Session["sessionData"];
+    if (sessionData != null) { rol = sessionData.rolID; }
+
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,8 +15,8 @@
     <!-- Loading third party fonts 
         <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    @Styles.Render("~/bundles/css");
-    @Scripts.Render("~/Scripts/jquery-1.11.1.min.js");
+    @Styles.Render("~/bundles/css")
+    @Scripts.Render("~/Scripts/jquery-1.11.1.min.js")
     <style type="text/css">
         .links:link {
            text-decoration:none;
@@ -30,11 +33,10 @@
     </style>
 </head>
 <body style="min-height: 100vh">
-
     <div id="site-content">
         <header class="site-header">
             <div class="container">
-                <a href="index.html" id="branding">
+                <a href="@Url.Action("index","home")" id="branding" class="links">
                     <img src="~/Content/images/logo.png" alt="" class="logo">
                     <div class="logo-copy">
                         <h1 class="site-title">Company Name</h1>
@@ -47,7 +49,9 @@
                         <li class="menu-item current-menu-item">
                             @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "links" })
                         </li>
-                        <li class="menu-item"><a class="links" href="#">Cartelera</a></li>
+                        <li class="menu-item">
+                            @Html.ActionLink("Cartelera", "billboard", new { controller = "movie" }, new { @class = "links" })
+                        </li>
                         <li class="menu-item"><a class="links" href="#">Próximamente</a></li>
                         <li class="menu-item"><a class="links" href="#">Acerca de</a></li>
                         @if (rol == 3)
@@ -57,17 +61,15 @@
                         else
                         {
                             <li class="menu-item dropdown">
-                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">
-                                    Administrador
-                                </a>
+                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">@sessionData.nameID</a>
                                 <br />
                                 <div class="dropdown-menu">
                                     <div class="text-center" style="padding: 10px 0 10px 0">
                                         <img src="http://simulacionymedicina.es/wp-content/uploads/2015/11/default-avatar-300x300-1.jpg" alt="Avatar" class="avatar avatar-48 img-circle">
                                     </div>
                                     <div class="text-center" style="padding-left: 15px; padding-right: 15px;">
-                                        <strong class="small">Mario Arce Díaz</strong>
-                                        <p class="small">marioarce402@gmail.com</p>
+                                        <strong class="small">@String.Concat(sessionData.firstName," ",sessionData.lastName)</strong>
+                                        <p class="small">@sessionData.email</p>
                                     </div>
                                     <div class="dropdown-divider"></div>
                                     @Html.ActionLink("Mi perfil", "profile", new { controller = "home" }, new { @class= "dropdown-item" })
@@ -156,6 +158,6 @@
     <!-- Default snippet for navigation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    @Scripts.Render("~/bundles/js");
+    @Scripts.Render("~/bundles/js")
 </body>
 </html>

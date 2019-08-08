@@ -1,14 +1,18 @@
-﻿using System.Diagnostics;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
 {
     public class HomeController : Controller
     {
-        
         public ActionResult Index()
         {
-            Debug.WriteLine("Controlador Home, AccessToken: "+Session["userAutentication"]);
+            return View();
+        }
+
+        public ActionResult Login()
+        {
+            Session["userAutentication"] = null;
+            Session["sessionData"] = null;
             return View();
         }
 

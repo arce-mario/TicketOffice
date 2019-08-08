@@ -1,0 +1,41 @@
+﻿@model CatchFilms.Models.Movie
+
+@{
+    ViewBag.Title = String.Concat("Detalles de ",Model.name);
+}
+<div class="container">
+    <div class="page">
+        <div class="breadcrumbs">
+            @Html.ActionLink("Inicio","index",new {controller = "home"})
+            @Html.ActionLink("Películas", "billboard", new {controller = "movie" })
+            <span>@Model.name</span>
+        </div>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-6" style="max-height: 400px;">
+                    <figure class="movie-poster"><img src="~/Content/dummy/slide-1.jpg" alt="#"></figure>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="movie-title">@Model.name</h2>
+                    <div class="movie-summary">
+                        <p>@Model.description</p>
+                    </div>
+                    <ul class="movie-meta">
+                        <li>
+                            <strong>Rating:</strong>
+                            <div class="star-rating" title="Rated 4.00 out of 5"><span style="width:80%"><strong class="rating">4.00</strong> out of 5</span></div>
+                        </li>
+                        <li><strong>Duración:</strong> @Model.time</li>
+                        <li><strong>Premier:</strong> 22 March 2013 (USA)</li>
+                        <li><strong>Categoria:</strong> @Model.classification</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="section-title">Próximas funciones</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CatchFilms.Models.Movie>
+
+@{
+    ViewBag.Title = "Cartelera";
+}
+<div class="container">
+    <div class="page">
+        <div class="breadcrumbs">
+            @Html.ActionLink("Inicio", "index", new { controller = "home" })
+            <span>Películas</span>
+        </div>
+        <div class="movie-list">
+        @foreach (var item in Model)
+        {
+            <div class="movie">
+                <figure class="movie-poster"><img src="~/Content/dummy/thumb-3.jpg" alt="#"></figure>
+                <div class="movie-title">
+                    @Html.ActionLink(item.name,"details", new { @id = item.movieID })
+                </div>
+                <p>@Html.DisplayFor(modelItem => item.description)</p>
+            </div>
+        }
+        </div>
+
+        <div class="pagination">
+            <a href="#" class="page-number prev"><i class="fa fa-angle-left"></i></a>
+            <span class="page-number current">1</span>
+            <a href="#" class="page-number">2</a>
+            <a href="#" class="page-number">3</a>
+            <a href="#" class="page-number">4</a>
+            <a href="#" class="page-number">5</a>
+            <a href="#" class="page-number next"><i class="fa fa-angle-right"></i></a>
+        </div>
+    </div>
+</div>

@@ -18,7 +18,6 @@ namespace CatchFilms
                 url: "signin",
                 defaults: new { controller = "Login", action = "ValidateUser"}
             );
-
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
