@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace CatchFilms.Models
 {
@@ -10,5 +11,10 @@ namespace CatchFilms.Models
         public String description { get; set; }
         public string classification { get; set; }        
         public TimeSpan time { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string coverURL { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string imageURL { get; set; }
+        public float raiting { get; set; }
     }
 }

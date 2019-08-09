@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = String.Concat("Detalles de ",Model.movie.name);
+    float raiting = @Model.movie.raiting;
+    float porcent = (raiting * 100)/ 5;
 }
 <div class="container">
     <div class="page">
@@ -23,7 +25,11 @@
                     <ul class="movie-meta">
                         <li>
                             <strong>Rating:</strong>
-                            <div class="star-rating" title="Rated 4.00 out of 5"><span style="width:80%"><strong class="rating">4.00</strong> out of 5</span></div>
+                            <div class="star-rating" title="Clasificación @raiting.ToString("0.00") de 5">
+                                <span style="width:@porcent.ToString("0")%">
+                                    <strong class="rating">@raiting.ToString("0.00")</strong> de 5
+                                </span>
+                            </div>
                         </li>
                         <li><strong>Duración:</strong> @Model.movie.time</li>
                         <li><strong>Premier:</strong> @Model.moviePremier</li>
@@ -40,7 +46,7 @@
                     {
                         <li>
                             <div class="date">@item.time.ToString("MM/dd")</div>
-                            <h2 class="entry-title"><a href="#">@item.description</a></h2>
+                            <h2 class="entry-title"><a href="@Url.Action("index","function")/@item.functionID">@item.description</a></h2>
                         </li>
                     }
                     </ul>

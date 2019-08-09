@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
+using System;
 
 namespace ApiCatchFilms.Controllers
 {
@@ -48,7 +49,16 @@ namespace ApiCatchFilms.Controllers
 
             return Ok(function);
         }
-
+        
+        // GET: api/Functions/getSimpleFunction/1
+        [Route("api/functions/movie/{movieID:int}")]
+        public IQueryable<Function> GetFunctionsMovie(int movieID)
+        {
+            return db.Functions
+                .Include(f => f.movie)
+                .Include(f => f.price).Include(f => f.room)
+                .Where(f => (f.movieID == movieID && f.time >= DateTime.UtcNow));
+        }
         [Authorize(Roles = LoginController.ADMIN_ROL)]
         // PUT: api/Functions/5
         [ResponseType(typeof(void))]

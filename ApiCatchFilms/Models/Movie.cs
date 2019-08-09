@@ -29,11 +29,9 @@ namespace ApiCatchFilms.Models
         public TimeSpan time { get; set; }
         [Required]
         public int status { get; set; }
-        [Required]
         [StringLength(800)]
         [Column("cover_url")]
         public string coverURL { get; set; }
-        [Required]
         [StringLength(800)]
         [Column("image_url")]
         public string imageURL { get; set; }

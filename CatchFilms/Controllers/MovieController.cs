@@ -69,7 +69,7 @@ namespace CatchFilms.Controllers
                     var readTask = result.Content.ReadAsAsync<Movie>();
                     readTask.Wait();
                     models.movie = readTask.Result;
-                    List<Function> functions = await new FunctionController().List(statusCode, Session["userAutentication"].ToString());
+                    List<Function> functions = await new FunctionController().List(statusCode, models.movie.movieID);
                     models.functions = functions;
                     models.moviePremier = functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
                 }

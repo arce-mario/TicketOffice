@@ -16,7 +16,7 @@ namespace CatchFilms.Controllers
     public class FunctionController : Controller
     {
         // GET: Function
-        public async Task<List<Function>> List(HttpStatusCode statusCode, string accessToken)
+        public async Task<List<Function>> List(HttpStatusCode statusCode, int movieID)
         {
             List<Function> functions = new List<Function>();
             using (var client = new HttpClient())
@@ -24,10 +24,7 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new
-                       AuthenticationHeaderValue("Bearer", accessToken);
-
-                HttpResponseMessage res = await client.GetAsync("api/functions");
+                HttpResponseMessage res = await client.GetAsync(String.Concat("api/functions/movie/",movieID));
 
                 if (res.IsSuccessStatusCode)
                 {

@@ -20,6 +20,8 @@ namespace CatchFilms.Models
         public DateTime birthDate { get; set; }
         public int rol { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string imageUserURL { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<Ticket> tickets { get; set; }
     }
 }

@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201908082059050_InsertElements.Designer.cs">
       <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908091944249_AlterEntities.cs" />
+    <Compile Include="Migrations\201908091944249_AlterEntities.Designer.cs">
+      <DependentUpon>201908091944249_AlterEntities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
     <Compile Include="Models\Function.cs" />
@@ -256,6 +260,9 @@
     <EmbeddedResource Include="Migrations\201908082059050_InsertElements.resx">
       <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908091944249_AlterEntities.resx">
+      <DependentUpon>201908091944249_AlterEntities.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -268,7 +275,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54642</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
