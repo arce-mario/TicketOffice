@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -13,7 +9,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class MoviesController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -38,6 +34,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // PUT: api/Movies/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMovie(int id, Movie movie)
         {
@@ -73,6 +70,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/Movies
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> PostMovie(Movie movie)
         {
@@ -88,6 +86,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/Movies/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> DeleteMovie(int id)
         {

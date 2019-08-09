@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
@@ -34,7 +34,6 @@ namespace CatchFilms.Controllers
                     var response = res.Content.ReadAsStringAsync().Result;
                     Debug.WriteLine(response);
                     functions = JsonConvert.DeserializeObject<List<Function>>(response);
-
                 }
                 statusCode = res.StatusCode;
                 Debug.WriteLine("Codigo de respuesta: " + res.StatusCode);

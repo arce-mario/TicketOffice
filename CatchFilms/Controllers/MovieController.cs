@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
@@ -69,7 +69,9 @@ namespace CatchFilms.Controllers
                     var readTask = result.Content.ReadAsAsync<Movie>();
                     readTask.Wait();
                     models.movie = readTask.Result;
-                    models.functions = await new FunctionController().List(statusCode, Session["userAutentication"].ToString());
+                    List<Function> functions = await new FunctionController().List(statusCode, Session["userAutentication"].ToString());
+                    models.functions = functions;
+                    models.moviePremier = functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
                 }
             }
 

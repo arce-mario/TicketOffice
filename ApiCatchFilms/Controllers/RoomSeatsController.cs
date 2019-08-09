@@ -13,7 +13,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class RoomSeatsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -38,6 +38,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // PUT: api/RoomSeats/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutRoomSeat(int id, RoomSeat roomSeat)
         {
@@ -73,6 +74,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/RoomSeats
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(RoomSeat))]
         public async Task<IHttpActionResult> PostRoomSeat(RoomSeat roomSeat)
         {
@@ -88,6 +90,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/RoomSeats/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(RoomSeat))]
         public async Task<IHttpActionResult> DeleteRoomSeat(int id)
         {

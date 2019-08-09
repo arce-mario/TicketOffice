@@ -9,17 +9,18 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class TicketsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
 
         // GET: api/Tickets
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         public IQueryable<Ticket> GetTickets()
         {
             return db.Tickets.Include(t => t.price).Include(t => t.user);
         }
-
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         // GET: api/Tickets/5
         [ResponseType(typeof(Ticket))]
         public async Task<IHttpActionResult> GetTicket(int id)
@@ -69,6 +70,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/Tickets
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Ticket))]
         public async Task<IHttpActionResult> PostTicket(Ticket ticket)
         {
@@ -84,6 +86,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/Tickets/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Ticket))]
         public async Task<IHttpActionResult> DeleteTicket(int id)
         {

@@ -16,7 +16,7 @@ namespace CatchFilms.Controllers
     [SessionState(SessionStateBehavior.Default)]
     public class LoginController : Controller
     {
-        public const string BaseUrl = "http://localhost:54642/";
+        public const string BaseUrl = "http://192.168.43.37/apicatchfilms/";
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ValidateUser(LoginUser loginUser)

@@ -13,7 +13,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class PricesController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -36,7 +36,7 @@ namespace ApiCatchFilms.Controllers
 
             return Ok(price);
         }
-
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         // PUT: api/Prices/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPrice(int id, Price price)
@@ -73,6 +73,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/Prices
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Price))]
         public async Task<IHttpActionResult> PostPrice(Price price)
         {
@@ -88,6 +89,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/Prices/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Price))]
         public async Task<IHttpActionResult> DeletePrice(int id)
         {

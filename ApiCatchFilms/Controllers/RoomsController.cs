@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [RoutePrefix("api/rooms")]
     public class RoomsController : ApiController
     {
@@ -44,6 +44,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // PUT: api/Rooms/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutRoom(int id, Room room)
         {
@@ -79,6 +80,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/Rooms
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> PostRoom(Room room)
         {
@@ -94,6 +96,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/Rooms/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> DeleteRoom(int id)
         {
