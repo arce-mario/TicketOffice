@@ -1,21 +1,24 @@
-﻿
+﻿@model CatchFilms.Models.User
 @{
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
     ViewBag.Title = "Registrarse";
 }
 
 <div class="container" style="max-width: 60%; min-width: 380px;">
 
-<form action="/examples/actions/confirmation.php" method="post">
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @action = String.Concat(baseUrl, "login/signup") }))
+{
+    @Html.AntiForgeryToken()
     <h2 class="text-center">Registrar cuenta de usuario</h2>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Primer nombre" required="required">
+                @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control", placeholder = "Primer Nombre" } })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Primer apellido" required="required">
+                @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Primer Apellido" } })
             </div>
         </div>
     </div>
@@ -25,24 +28,24 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="date" class="form-control" required="required">
+                @Html.EditorFor(model => model.birthDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Correo electrónico" required="required">
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Correo electrónico" } })
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Nombre de usuario" required="required">
+                @Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre de usuario" } })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="Contraseña" required="required">
+                @Html.EditorFor(model => model.pass, new { htmlAttributes = new { @class = "form-control", placeholder = "Contraseña" } })
             </div>
         </div>
     </div>
@@ -50,10 +53,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <button type="submit" class="btn btn-warning btn-block" style="color: #FFF;">Acceder</button>
+                <button type="submit" class="btn btn-warning btn-block" style="color: #FFF;">Registrarse</button>
             </div>
         </div>
     </div>
-
-</form>
+}
 </div>

@@ -13,18 +13,18 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [Authorize(Roles = LoginController.ADMIN_ROL)]
+    [AllowAnonymous]
     public class UsersController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
 
-        // GET: api/Users
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         public IQueryable<User> GetUsers()
         {
             return db.Users.Include(s => s.tickets);
         }
 
-        // GET: api/Users/5
+        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
@@ -76,6 +76,7 @@ namespace ApiCatchFilms.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> PostUser(User user)
         {
+            user.hireDare = DateTime.UtcNow;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

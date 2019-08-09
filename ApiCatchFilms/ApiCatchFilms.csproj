@@ -189,6 +189,10 @@
     <Compile Include="Migrations\201908051715592_ChangesEntitiesDatabase.Designer.cs">
       <DependentUpon>201908051715592_ChangesEntitiesDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908082059050_InsertElements.cs" />
+    <Compile Include="Migrations\201908082059050_InsertElements.Designer.cs">
+      <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
     <Compile Include="Models\Function.cs" />
@@ -248,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908051715592_ChangesEntitiesDatabase.resx">
       <DependentUpon>201908051715592_ChangesEntitiesDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908082059050_InsertElements.resx">
+      <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

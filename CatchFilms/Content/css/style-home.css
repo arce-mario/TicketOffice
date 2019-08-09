@@ -1393,8 +1393,10 @@ ul.arrow {
   float: left; }
   #branding .logo, #branding .logo-copy {
     display: inline-block; }
-  #branding .logo {
-    margin-right: 10px; }
+    #branding .logo {
+        margin-right: 10px;
+        margin-bottom: 25px;
+    }
   #branding .site-title {
     margin: 0;
     text-transform: uppercase;
