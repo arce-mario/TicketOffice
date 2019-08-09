@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -48,36 +49,31 @@ namespace CatchFilms.Controllers
             }
         }
 
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
-            Movie movie = null;
+            dynamic models = new ExpandoObject();
+            HttpStatusCode statusCode = HttpStatusCode.Unauthorized;
 
-            if (id == null)
+            using (var client = new HttpClient())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                using (var client = new HttpClient())
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
                 {
-                    client.BaseAddress = new Uri(LoginController.BaseUrl);
-                    if (Session["userAutentication"] != null)
-                    {
-                        client.DefaultRequestHeaders.Authorization = new
-                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
-                    }
-                    var responseTask = client.GetAsync(String.Concat("api/movies/", id));
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readTask = result.Content.ReadAsAsync<Movie>();
-                        readTask.Wait();
-                        movie = readTask.Result;
-                    }
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
+                var responseTask = client.GetAsync(String.Concat("api/movies/", id));
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<Movie>();
+                    readTask.Wait();
+                    models.movie = readTask.Result;
+                    models.functions = await new FunctionController().List(statusCode, Session["userAutentication"].ToString());
                 }
             }
 
-            return View(movie);
+            return View(models);
         }
     }
 }
