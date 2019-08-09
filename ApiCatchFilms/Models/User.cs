@@ -8,7 +8,6 @@ namespace ApiCatchFilms.Models
 {
     public class User
     {
-
         [Column("user_id")]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -38,6 +37,11 @@ namespace ApiCatchFilms.Models
         public DateTime birthDate { get; set; }
         [Required]
         public int rol { get; set; }
+        
+        [StringLength(800)]
+        [Column("image_user_url")]
+        public string imageUserURL { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<Ticket> tickets { get; set; }
     }
