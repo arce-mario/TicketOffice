@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,15 +30,15 @@ namespace ApiCatchFilms.Models
         public TimeSpan time { get; set; }
         [Required]
         public int status { get; set; }
-        [Required]
         [StringLength(800)]
         [Column("cover_url")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string coverURL { get; set; }
-        [Required]
         [StringLength(800)]
         [Column("image_url")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string imageURL { get; set; }
         [Required]
-        public float raiting { get; set; }
+        public float rating { get; set; }
     }
 }
