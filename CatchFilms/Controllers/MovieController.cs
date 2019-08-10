@@ -77,5 +77,53 @@ namespace CatchFilms.Controllers
 
             return View(models);
         }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Movie movie)
+        {
+            movie.movieID = null;
+            Debug.WriteLine(JsonConvert.SerializeObject(movie));
+
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri(LoginController.BaseUrl);
+
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
+                    var postTask = client.PostAsJsonAsync<Movie>("api/movies", movie);
+
+                    postTask.Wait();
+                    var res = postTask.Result;
+
+                    if (res.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("create", "movie");
+                    }
+                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToAction("unauthorized", "error");
+                    }
+
+                    Debug.WriteLine("ERROR: " + res.StatusCode);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERROR: " + e.Message);
+                }
+
+                ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear una nueva pelicula");
+                return RedirectToAction("create", "movie");
+            }
+        }
     }
 }

@@ -246,6 +246,7 @@
     <Content Include="Views\Movie\Billboard.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
+    <Content Include="Views\Movie\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
