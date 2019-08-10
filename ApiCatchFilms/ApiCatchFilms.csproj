@@ -181,21 +181,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201908042009195_InitialCreate.cs" />
-    <Compile Include="Migrations\201908042009195_InitialCreate.Designer.cs">
-      <DependentUpon>201908042009195_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908051715592_ChangesEntitiesDatabase.cs" />
-    <Compile Include="Migrations\201908051715592_ChangesEntitiesDatabase.Designer.cs">
-      <DependentUpon>201908051715592_ChangesEntitiesDatabase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908082059050_InsertElements.cs" />
-    <Compile Include="Migrations\201908082059050_InsertElements.Designer.cs">
-      <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201908091944249_AlterEntities.cs" />
-    <Compile Include="Migrations\201908091944249_AlterEntities.Designer.cs">
-      <DependentUpon>201908091944249_AlterEntities.cs</DependentUpon>
+    <Compile Include="Migrations\201908092058257_Initial-Create.cs" />
+    <Compile Include="Migrations\201908092058257_Initial-Create.Designer.cs">
+      <DependentUpon>201908092058257_Initial-Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
@@ -251,17 +239,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201908042009195_InitialCreate.resx">
-      <DependentUpon>201908042009195_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908051715592_ChangesEntitiesDatabase.resx">
-      <DependentUpon>201908051715592_ChangesEntitiesDatabase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908082059050_InsertElements.resx">
-      <DependentUpon>201908082059050_InsertElements.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201908091944249_AlterEntities.resx">
-      <DependentUpon>201908091944249_AlterEntities.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201908092058257_Initial-Create.resx">
+      <DependentUpon>201908092058257_Initial-Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

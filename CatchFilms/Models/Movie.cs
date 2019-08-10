@@ -15,6 +15,6 @@ namespace CatchFilms.Models
         public string coverURL { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string imageURL { get; set; }
-        public float raiting { get; set; }
+        public float rating { get; set; }
     }
 }

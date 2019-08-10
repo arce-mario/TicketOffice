@@ -24,13 +24,6 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                if (Session["userAutentication"] != null)
-                {                    
-                    client.DefaultRequestHeaders.Authorization = new 
-                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
-                }
-
                 HttpResponseMessage res = await client.GetAsync("api/movies");
 
                 if (res.IsSuccessStatusCode)
@@ -40,11 +33,6 @@ namespace CatchFilms.Controllers
                     Movies = JsonConvert.DeserializeObject<List<Movie>>(response);
 
                 }
-                else if (res.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return RedirectToAction("unauthorized", "error");
-                }
-                Debug.WriteLine("Codigo de respuesta: "+res.StatusCode);
                 return View(Movies);
             }
         }
@@ -57,13 +45,9 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-                if (Session["userAutentication"] != null)
-                {
-                    client.DefaultRequestHeaders.Authorization = new
-                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
-                }
                 var responseTask = client.GetAsync(String.Concat("api/movies/", id));
                 var result = responseTask.Result;
+
                 if (result.IsSuccessStatusCode)
                 {
                     var readTask = result.Content.ReadAsAsync<Movie>();
@@ -73,6 +57,12 @@ namespace CatchFilms.Controllers
                     models.functions = functions;
                     models.moviePremier = functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
                 }
+                else if (result.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return HttpNotFound();
+                }
+                Debug.WriteLine("Codigo: "+ result.StatusCode);
+                
             }
 
             return View(models);
