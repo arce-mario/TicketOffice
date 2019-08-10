@@ -26,6 +26,11 @@ namespace ApiCatchFilms
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.Routes.MapHttpRoute(
+                name: "SimpleModels",
+                routeTemplate: "api/{controller}/simplemodel/{id}",
+                defaults: new { action = "GetSimpleModel", id = RouteParameter.Optional }
+            );
             config.MessageHandlers.Add(new ValidarTokenHandler());
         }
     }
