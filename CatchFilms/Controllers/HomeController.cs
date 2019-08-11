@@ -20,5 +20,10 @@ namespace CatchFilms.Controllers
         {
             return View();
         }
+
+        public ActionResult About()
+        {
+            return View();
+        }
     }
 }
