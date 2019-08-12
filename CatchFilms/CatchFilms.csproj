@@ -264,13 +264,10 @@
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\Movie\Create.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Function\Details.cshtml" />
     <Content Include="Views\Function\Create.cshtml" />
     <Content Include="Views\Room\Create.cshtml" />
-=======
     <Content Include="Views\Home\About.cshtml" />
->>>>>>> 93426acd8e3643ceb9134aa65d4e2d2a3395d96b
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
