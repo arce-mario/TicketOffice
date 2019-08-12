@@ -193,6 +193,11 @@
     <Content Include="Content\images\placeholder.jpg" />
     <Content Include="Content\images\select%402x.png" />
     <Content Include="Content\images\select.png" />
+    <Content Include="Img\babss.jpg" />
+    <Content Include="Img\cole.jpg" />
+    <Content Include="Img\sele.jpg" />
+    <Content Include="Img\shawncito.jpg" />
+    <Content Include="Img\uca2.jpg" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\ie-support\html5.js" />
     <Content Include="Scripts\ie-support\pie.htc" />
@@ -259,9 +264,13 @@
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\Movie\Create.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Function\Details.cshtml" />
     <Content Include="Views\Function\Create.cshtml" />
     <Content Include="Views\Room\Create.cshtml" />
+=======
+    <Content Include="Views\Home\About.cshtml" />
+>>>>>>> 93426acd8e3643ceb9134aa65d4e2d2a3395d96b
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
