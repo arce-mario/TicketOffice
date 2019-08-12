@@ -1,0 +1,123 @@
+﻿@model CatchFilms.Models.Room
+@Styles.Render("~/Content/css/style-seats.css")
+@Scripts.Render("~/Scripts/jquery.seat-charts.js")
+@{
+    ViewBag.Title = "Registrar sala";
+}
+
+<div class="container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.number, htmlAttributes: new { @class = "control-label" })
+                <div class="form-group">
+                    @Html.EditorFor(model => model.number, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.number, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.description, htmlAttributes: new { @class = "form-control form-control-full" })
+                    @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="control-label">Definir la cantidad de filas</label>
+                <div class="form-group">
+                    <input name="rows" id="rows"  type="number" class="form-control" placeholder="Número de filas" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Cantidad de columnas</label>
+                <div class="form-group">
+                    <input name="columns" id="columns" min="5" max="11" type="number" class="form-control" placeholder="Número de columnas" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="control-label">Cantidad total de butacas</label>
+                <div class="form-group">
+                    <input type="number" id="seats" min="5" max="11" class="form-control" disabled />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="seat-map" style="display: none;">
+                    <div class="front">PANTALLA</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+               <div id="legend"></div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    var price = 10; //price
+    var cont = 1;
+    var max = 1;
+    $(document).ready(function () {
+        $("#rows").keyup(function () {
+            if ($("#columns").val() != "") {
+                $("#seats").val(parseInt($("#rows").val()) * parseInt($("#columns").val()))
+            }
+        });
+
+        $("#columns").keyup(function () {
+            if ($("#rows").val() != "") {
+                $("#seats").val(parseInt($("#rows").val()) * parseInt($("#columns").val()))
+            }
+        });
+        
+        var array = [  //Seating chart
+            'aaaaaaaaaa',
+            'aaaaaaaaaa',
+            '__________',
+            'aaaaaaaa__',
+            'aaaaaaaaaa',
+            'aaaaaaaaaa',
+            'aaaaaaaaaa',
+            'aaaaaaaaaa',
+            'aaaaaaaaaa'
+        ];
+    });
+
+    function define_room(array) {
+        $('#seat-map').show();
+        var sc = $('#seat-map').seatCharts({
+            map: array,
+            naming: {
+                top: false,
+                getLabel: function (character, row, column) {
+                    return column;
+                }
+            },
+            legend: { //Definition legend
+                node: $('#legend'),
+                items: [
+                    ['a', 'available', 'Disponible'],
+                    ['a', 'unavailable', 'Reservado'],
+                    ['a', 'selected', 'Selecionado']
+                ]
+            },
+            click: function () { //Click event
+                if (this.status() == 'available' && cont <= max) { //optional seat
+                    return 'selected';
+                } else if (this.status() == 'selected') { //Checked
+                    return 'available';
+                } else if (this.status() == 'unavailable') { //sold
+                    return 'unavailable';
+                } else {
+                    return this.style();
+                }
+            }
+        });
+    }
+
+</script>

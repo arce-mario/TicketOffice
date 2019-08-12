@@ -1,0 +1,61 @@
+﻿@using System.Globalization;
+@model CatchFilms.Models.Function
+
+@{
+    ViewBag.Title = "Detalles de la función";
+    float rating = @Model.movie.rating;
+    float porcent = (rating * 100) / 5;
+}
+
+<div class="container">
+    <div class="page">
+        <div class="breadcrumbs">
+            @Html.ActionLink("Inicio", "index", new { controller = "home" })
+            @Html.ActionLink("Películas", "billboard", new { controller = "movie" })
+            @Html.ActionLink(Model.movie.name, "details", "movie", new { id = Model.movieID }, null)
+            <span>@Model.description</span>
+        </div>
+
+        <div class="content">
+            <h2 class="site-title">@Model.description</h2>
+
+            <!--Información de la pelicula-->
+            <div class="row">
+                <div class="col-md-6" style="max-height: 400px;">
+                    <figure class="movie-poster"><img src="~/Content/dummy/slide-1.jpg" alt="#"></figure>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="movie-title">@Model.movie.name</h2>
+                    <div class="movie-summary">
+                        <p>@Model.movie.description</p>
+                    </div>
+                    <ul class="movie-meta">
+                        <li>
+                            <strong>Rating:</strong>
+                            <div class="star-rating" title="Clasificación @rating.ToString("0.00") de 5">
+                                <span style="width:@porcent.ToString("0")%">
+                                    <strong class="rating">@rating.ToString("0.00")</strong> de 5
+                                </span>
+                            </div>
+                        </li>
+                        <li><strong>Duración:</strong> @Model.movie.time</li>
+                        <li><strong>Premier:</strong> @Model.time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"))</li>
+                        <li><strong>Categoria:</strong> @Model.movie.classification</li>
+                    </ul>
+                </div>
+            </div>
+            <!--Información de la sala-->
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+            <!--Información de lo precio del ticket-->
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

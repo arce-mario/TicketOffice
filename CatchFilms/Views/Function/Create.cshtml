@@ -1,0 +1,335 @@
+﻿@model CatchFilms.Models.Function
+@Styles.Render("~/Content/css/functions.css")
+@{
+    ViewBag.Title = "Registrar función";
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    CatalogType types = new CatalogType();
+    types.init();
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "signupform" })) 
+{
+    @Html.AntiForgeryToken()
+    @Html.TextBoxFor(model => model.movieID, new { type = "hidden" })
+    @Html.TextBoxFor(model => model.roomID, new { type = "hidden" })
+    @Html.TextBoxFor(model => model.priceID, new { type = "hidden" })
+    <div class="container">
+        <div class="content">
+            <div class="page">
+                <h5 class="section-title">@ViewBag.Title</h5>
+                <!--Definición de los datos de la función-->
+                <div class="row">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="col-md-12">@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })<br /></div>
+                    }
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.time, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.time, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+                            @Html.ValidationMessageFor(model => model.time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.type, types.getFunctionsTypes, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.typeMovie, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.typeMovie, types.getMoviesTypes, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.typeMovie, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <h5 class="section-title" style="font-size: 1.3em;">Datos de la película</h5>
+                <!--Registro de los datos de la película-->
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="switch-movie">
+                    <label class="custom-control-label" for="switch-movie" style="padding-top: 3px;">Selecionar un registro existente</label>
+                </div>
+                <br/>
+                <div id="select-movie" class="row" style="display: none;">
+                    <div class="col-md-4">
+                        <div>
+                            <input id="search-movie" type="text" placeholder="Nombre de la película">
+                            <button id="search-movie-btn" type="button" onclick="get_results_movies()">Buscar <i class="fa fa-search"></i></button>
+                        </div>
+                        <br/>
+                    </div>
+                    <div id="select-movie-body" class="col-md-12" style="max-height: 300px; overflow: auto;"></div>
+                </div>
+                <div id="form-movie" class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.movie.name, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.movie.name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.movie.name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        @Html.LabelFor(model => model.movie.classification, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.movie.classification, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.movie.classification, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.movie.time, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.movie.time, new { htmlAttributes = new { @class = "form-control without_ampm", step = "1", type = "time", min = "00:00:00", max = "03:59:00"} })
+                            @Html.ValidationMessageFor(model => model.movie.time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        @Html.LabelFor(model => model.movie.description, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.TextAreaFor(model => model.movie.description, new { @class = "form-control form-control-full" })
+                            @Html.ValidationMessageFor(model => model.movie.description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <br />      
+                <h5 class="section-title" style="font-size: 1.3em;">Costos de ticket y datos de la sala</h5>
+                <!--Registro de los datos del precio y la definición de la sala-->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switch-prices">
+                            <label class="custom-control-label" for="switch-prices" style="padding-top: 3px;">Selecionar precio vigente</label>
+                        </div>
+                        <br />
+                        <div id="form-prices">
+                            <!--Precio del ticket para adultos-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.price.adultPrice, htmlAttributes: new { @class = "control-label" })
+                                    <div class="form-group">
+                                        @Html.EditorFor(model => model.price.adultPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.price.adultPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Precio para la tercera edad-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.price.oldManPrice, htmlAttributes: new { @class = "control-label" })
+                                    <div class="form-group">
+                                        @Html.EditorFor(model => model.price.oldManPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.price.oldManPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Precio para niños-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.price.childPrice, htmlAttributes: new { @class = "control-label" })
+                                    <div class="form-group">
+                                        @Html.EditorFor(model => model.price.childPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.price.childPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Datos de la sala-->
+                    <div class="col-md-8">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switch-room">
+                            <label class="custom-control-label" for="switch-room" style="padding-top: 3px;">Selecionar datos de sala</label>
+                        </div>
+                        <br />
+                        <div id="form-room" class="row">
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.room.number, htmlAttributes: new { @class = "control-label" })
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.room.number, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.room.number, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                @Html.LabelFor(model => model.room.description, htmlAttributes: new { @class = "control-label" })
+                                <div class="form-group">
+                                    @Html.TextAreaFor(model => model.room.description, htmlAttributes: new { @class = "form-control form-control-full"})
+                                    @Html.ValidationMessageFor(model => model.room.description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div id="select-room" class="row" style="display: none">
+                            <div class="col-md-12">
+                                <div>
+                                    <input id="search-rooms" type="text" placeholder="Nombre, sala 1" class="active">
+                                    <button id="search-rooms-btn" onclick="get_results_rooms()">Buscar <i class="fa fa-search"></i></button>
+                                </div>
+                                <br />
+                            </div>
+                            <div id="select-rooms-body" class="col-md-12 select-room"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" onclick="signupform.submit()">Registrar nueva función</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#switch-movie').click(function () {
+            if ($(this).is(':checked')) {
+                console.log("Activos...");
+                $("#form-movie").hide();
+                $("#select-movie").show();
+            } else {
+                $("#select-movie").hide();
+                $("#form-movie").show();
+            }
+        });
+
+        $('#switch-room').click(function () {
+            if ($(this).is(':checked')) {
+                console.log("Activos...");
+                $("#form-room").hide();
+                $("#select-room").show();
+            } else {
+                $("#select-room").hide();
+                $("#form-room").show();
+            }
+        });
+
+        $('#switch-prices').click(function () {
+            if ($(this).is(':checked')) {
+                console.log("Activos...");
+                $("#form-prices").addClass("disabled-content");
+                $("#priceID").val(-1);
+            } else {
+                $("#priceID").val(0);
+                $("#form-prices").removeClass("disabled-content");
+            }
+        });
+    });
+
+    window.addEventListener("load", function () {
+        $('#time').val('@DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ', 'T')');
+        $('#movie_time').val("00:00:00");
+    });
+
+    function show_progress(body_id) {
+        var result_body = $('#'.concat(body_id));
+        var content = $('<div class="content-search" align="center"></div>');
+        //Se elimina el contenido en el área de resultados
+        result_body.html('');
+        content.append('<label><i class="fa fa-spin fa-refresh"></i> Cargando resultados de la búsqueda...</label>');
+        result_body.append(content);
+    }
+
+    function get_results_movies() {
+
+        if ($("#search-movie").val() != ""){
+
+            //Se muestra un mensaje de progreso en la vista
+            show_progress('select-movie-body');
+            $('#search-movie-btn').attr("disabled", true);
+
+            $.get('@String.Concat(baseUrl,"movie/getmovies?")' +'opc=1&movie='+$("#search-movie").val(), function (data, status) {
+                var movies = JSON.parse(data);
+                //Se intancia el div en el que se mostrarán los resultados al cliente
+                var result_body = $('#select-movie-body');
+                //Se eliminan todos los elementos contenidos en el área de resultados
+                result_body.html('');
+                //Se recorre la lista de películas encontradas, se han defino como máximo 4 resultados
+                movies.forEach(function (movie) {
+                    var content = $('<div class="content-search" onclick="define_movie_id(' + movie.movieID + ',\''+movie.name+'\')"></div>');
+                    content.append('<label><strong>Nombre de la película: </strong>' + movie.name + '</label>');
+                    content.append('<p><strong>Descripción:</strong></p>');
+                    content.append('<p>' + movie.description + '</p>');
+                    result_body.append(content);
+                });
+                //se válida que el arreglo no haya venido vacío
+                if (movies.length == 0 || movies == undefined) {
+                    var content = $('<div class="content-search" align="center"></div>');
+                    content.append('<label><i class="fa fa-warning"></i> Sin resultados por mostrar...</label>');
+                    result_body.append(content);
+                }
+                $('#search-movie-btn').attr("disabled", false);
+            }).error(function () {
+                var content = $('<div class="content-search" align="center"></div>');
+                content.append('<label><i class="fa fa-warning"></i> Error al tratar de obtener los resultados...</label>');
+                $('#select-movie-body').html('');
+                $('#select-movie-body').append(content);
+                $('#search-movie-btn').attr("disabled", false);
+            });
+        } else {
+            $('#search-movie-btn').attr("disabled", false);
+            alert("Debe definir el nombre de la película a buscar");
+        }
+    }
+    /** Método para relaizar la búsqueda de las salas **/
+    function get_results_rooms() {
+
+        if ($("#search-rooms").val() != ""){
+
+            //Se muestra un mensaje de progreso en la vista
+            show_progress('select-rooms-body');
+            $('#search-rooms-btn').attr("disabled", true);
+
+            $.get('@String.Concat(baseUrl,"room/getrooms?name=")' + $("#search-rooms").val(), function (data, status) {
+                var rooms = JSON.parse(data);
+                //Se intancia el div en el que se mostrarán los resultados al cliente
+                var result_body = $('#select-rooms-body');
+                //Se eliminan todos los elementos contenidos en el área de resultados
+                result_body.html('');
+                //Se recorre la lista de películas encontradas, se han defino como máximo 4 resultados
+                rooms.forEach(function (room) {
+                    var content = $('<div class="content-search" onclick="define_room_id(' + room.roomID + ',\'Sala '+room.number+'\')"></div>');
+                    content.append('<label><strong>Nombre: </strong> Sala ' + room.number + '</label>');
+                    content.append('<p><b>Descripción:</b></p>');
+                    content.append('<p>' + room.description + '</p>');
+                    result_body.append(content);
+                });
+                //se válida que el arreglo no haya venido vacío
+                if (movies.length == 0 || movies == undefined) {
+                    var content = $('<div class="content-search" align="center"></div>');
+                    content.append('<label><i class="fa fa-warning"></i> Sin resultados por mostrar...</label>');
+                    result_body.append(content);
+                }
+                $('#search-rooms-btn').attr("disabled", false);
+            }).error(function () {
+                var content = $('<div class="content-search" align="center"></div>');
+                content.append('<label><i class="fa fa-warning"></i> Error al tratar de obtener los resultados...</label>');
+                $('#select-rooms-body').html('');
+                $('#select-rooms-body').append(content);
+                $('#search-rooms-btn').attr("disabled", false);
+            });
+        } else {
+            $('#search-rooms-btn').attr("disabled", false);
+            alert("Debe definir el nombre de la sala a buscar");
+        }
+    }
+
+    function define_room_id(room_id, name) {
+        $('#roomID').val(room_id);
+        alert('La sala selecionada para esta función es: '.concat(name));
+    }
+    function define_movie_id(movie_id, name) {
+        $('#movieID').val(movie_id);
+        alert('La película selecionada para esta función es: '.concat(name));
+    }
+</script>
