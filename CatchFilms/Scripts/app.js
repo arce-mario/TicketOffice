@@ -13,13 +13,19 @@
             var $parent = $(this).parent(".search-form");
             $parent.find("input").toggleClass("active").focus();
 
-            if($(this).hasClass("active")) {
-                console.log("Activa...");
-            } else {
-                console.log("Inactiva...");
+            if (!$(this).hasClass("active")) {
+                $('.search-form').attr('action', '/movie/searchmovies');
+                $('.search-form').submit(); 
             }
-		});
-        
+        });
+
+        $("#search_movie").on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                $('.search-form').attr('action', '/movie/searchmovies');
+                $('.search-form').submit(); 
+            }
+        });
+
 		$(".slider").flexslider({
 			controlNav: false,
 			prevText:'<i class="fa fa-chevron-left"></i>',

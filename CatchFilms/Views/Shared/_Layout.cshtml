@@ -2,7 +2,7 @@
     int rol = 3;
     SessionData sessionData = (SessionData) Session["sessionData"];
     if (sessionData != null) { rol = sessionData.rolID; }
-
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -12,9 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
 
     <title>@ViewBag.Title</title>
-    <!-- Loading third party fonts 
-        <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">-->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
     @Styles.Render("~/bundles/css")
     @Scripts.Render("~/Scripts/jquery-1.11.1.min.js")
     <style type="text/css">
@@ -29,6 +29,9 @@
         }
         .menu-item .dropdown-menu a{
             padding: 7px 15px 7px 15px;
+        }
+        .dropdown-menu.show {
+            margin-top: 13px;
         }
     </style>
 </head>
@@ -49,11 +52,36 @@
                         <li class="menu-item current-menu-item">
                             @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "links" })
                         </li>
-                        <li class="menu-item">
-                            @Html.ActionLink("Cartelera", "billboard", new { controller = "movie" }, new { @class = "links" })
-                        </li>
-                        <li class="menu-item"><a class="links" href="#">Próximamente</a></li>
-                        <li class="menu-item"><a class="links" href="#">Acerca de</a></li>
+                        @if (rol == 1)
+                        {
+                             <li class="menu-item dropdown">
+                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Servicios</a>
+                                <br />
+                                <div class="dropdown-menu">
+                                    @Html.ActionLink("Registrar película", "create", new { controller = "movie" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Ver registros", "billboard", new { controller = "movie" }, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                    @Html.ActionLink("Registrar función", "create", new { controller = "function" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Ver registros", "index", new { controller = "function" }, new { @class = "dropdown-item" })
+                                </div>
+                             </li>
+                            <li class="menu-item dropdown">
+                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Salas</a>
+                                <br />
+                                <div class="dropdown-menu">
+                                    @Html.ActionLink("Informe de salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Registrar nueva sala", "create", new { controller = "room" }, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="menu-item">
+                                @Html.ActionLink("Cartelera", "billboard", new { controller = "movie" }, new { @class = "links" })
+                            </li>
+                            <li class="menu-item"><a class="links" href="#">Próximamente</a></li>
+                            <li class="menu-item"><a class="links" href="#">Acerca de</a></li>
+                        }
                         @if (rol == 3)
                         {
                             <li class="menu-item">@Html.ActionLink("Iniciar sesión", "login", new { controller = "home" }, new { @class = "links" })</li>
@@ -78,8 +106,8 @@
                             </li>
                         }
                     </ul> <!-- .menu -->
-                    <form class="search-form">
-                        <input id="search_movie" type="text" placeholder="Buscar...">
+                    <form class="search-form" method="get">
+                        <input id="search_movie" name="name" type="text" placeholder="Buscar...">
                         <button type="button"><i class="fa fa-search"></i></button>
                     </form>
                 </div> <!-- .main-navigation -->

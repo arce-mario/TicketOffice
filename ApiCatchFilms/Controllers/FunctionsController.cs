@@ -7,10 +7,11 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
 using System;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace ApiCatchFilms.Controllers
 {
-    [AllowAnonymous]
     public class FunctionsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -97,17 +98,34 @@ namespace ApiCatchFilms.Controllers
 
         // POST: api/Functions
         [ResponseType(typeof(Function))]
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
         public async Task<IHttpActionResult> PostFunction(Function function)
         {
+            //Se valida que el usuario no haya ingresado un valor existente en la base de datos
+            if (function.price != null && function.priceID == 0)
+            {
+                Price price = function.price;
+                Price prices = await db.Prices
+                    .Where(p => p.oldManPrice == price.oldManPrice && p.adultPrice == price.adultPrice && p.childPrice == price.childPrice)
+                    .FirstOrDefaultAsync();
+
+                function.price = null;
+                function.priceID = prices.priceID;
+            }
+            else if(function.priceID == -1)
+            {
+                Price price = await db.Prices.Where(p => p.valid != null).FirstOrDefaultAsync();
+                Debug.WriteLine("FunctionController :: PostFunction() :: default price: " + JsonConvert.SerializeObject(price));
+                if (price == null ) { return StatusCode(HttpStatusCode.NotAcceptable); }
+                function.priceID = price.priceID;
+            }
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            Debug.WriteLine("Función: " + JsonConvert.SerializeObject(function));
             db.Functions.Add(function);
             await db.SaveChangesAsync();
-
             return CreatedAtRoute("DefaultApi", new { id = function.functionID }, function);
         }
 

@@ -115,5 +115,46 @@ namespace CatchFilms.Controllers
                 return RedirectToAction("create", "movie");
             }
         }
+         public async Task<string> getMovies(string movie)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage res = await client.GetAsync(String.Concat("api/movies?movie=",movie));
+
+                if (res.IsSuccessStatusCode)
+                {
+                    return res.Content.ReadAsStringAsync().Result;
+                }
+            }
+            return "[]";
+        }
+
+        public async Task<ActionResult> searchMovies(string name)
+        {
+            List<Movie> Movies = new List<Movie>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage res = await client.GetAsync(String.Concat("api/movies?name=",name));
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var response = res.Content.ReadAsStringAsync().Result;
+                    Debug.WriteLine(response);
+                    Movies = JsonConvert.DeserializeObject<List<Movie>>(response);
+
+                }
+
+                return View("~/Views/Movie/Billboard.cshtml", Movies);
+            }
+        }
+
+
+
     }
 }

@@ -12,12 +12,15 @@
         <div class="movie-list">
         @foreach (var item in Model)
         {
+            item.imageURL = (item.imageURL == null)? "placeholder-results.jpg" : item.imageURL;
             <div class="movie">
-                <figure class="movie-poster"><img src="~/Content/dummy/thumb-3.jpg" alt="#"></figure>
+                <figure class="movie-poster"><img src="~/Content/images/@item.imageURL" alt="#"></figure>
                 <div class="movie-title">
                     @Html.ActionLink(item.name,"details", new { @id = item.movieID })
                 </div>
-                <p>@Html.DisplayFor(modelItem => item.description)</p>
+                <p>
+                    @String.Concat(item.description.Substring(0, 68),"...")
+                </p>
             </div>
         }
         </div>

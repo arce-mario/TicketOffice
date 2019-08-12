@@ -23,7 +23,6 @@ namespace ApiCatchFilms.Models
         public int priceID { get; set; }
         [Required]
         public DateTime time { get; set; }
-        [Required]
         public int type { get; set; }
         [Column("type_movie")]
         [Required]

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
+using System;
+using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
@@ -14,12 +16,26 @@ namespace ApiCatchFilms.Controllers
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
 
-        // GET: api/Movies
-        public IQueryable<Movie> GetMovies()
+        //opc == 1 // todos los registros
+        public IQueryable<Movie> GetMovies(string movie = "",string name="", int opc = 0)
         {
-            return db.Movies;
-        }
+            if (movie != ""){
+                return db.Movies
+                    .Where(m => m.name.Contains(movie))
+                    .Take(2);
+            }
 
+            if (name != "")
+            {
+                return db.Movies.Where(m => db.Functions.Where(f => (m.movieID == f.movieID) && f.time >= DateTime.UtcNow).Count() >= 1 && m.name.Contains(name));
+            }
+
+            if (opc == 0)
+            {
+                return db.Movies.Where(m => (db.Functions.Where(f => (f.movieID == m.movieID) && f.time >= DateTime.UtcNow).Count() >= 1));
+            }
+            return null;
+        }
         // GET: api/Movies/5
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> GetMovie(int id)

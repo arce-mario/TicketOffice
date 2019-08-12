@@ -182,9 +182,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201908092058257_Initial-Create.cs" />
-    <Compile Include="Migrations\201908092058257_Initial-Create.Designer.cs">
-      <DependentUpon>201908092058257_Initial-Create.cs</DependentUpon>
+    <Compile Include="Migrations\201908100807212_Initial-Create.cs" />
+    <Compile Include="Migrations\201908100807212_Initial-Create.Designer.cs">
+      <DependentUpon>201908100807212_Initial-Create.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908112334372_Alter-Price.cs" />
+    <Compile Include="Migrations\201908112334372_Alter-Price.Designer.cs">
+      <DependentUpon>201908112334372_Alter-Price.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
@@ -240,8 +244,11 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201908092058257_Initial-Create.resx">
-      <DependentUpon>201908092058257_Initial-Create.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201908100807212_Initial-Create.resx">
+      <DependentUpon>201908100807212_Initial-Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908112334372_Alter-Price.resx">
+      <DependentUpon>201908112334372_Alter-Price.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace CatchFilms.Models
 {
     public class Room
     {
-       
-        public int roomID { get; set; }
-        public int number { get; set; }        
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? roomID { get; set; }
+        [DisplayName("Número de sala")]
+        public int number { get; set; }
+        [DisplayName("Descripción")]
         public String description { get; set; }
     }
 }

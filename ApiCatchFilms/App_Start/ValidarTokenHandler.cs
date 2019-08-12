@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -62,10 +63,12 @@ namespace ApiCatchFilms.Controllers
             catch (SecurityTokenValidationException ex)
             {
                 statusCode = HttpStatusCode.Unauthorized;
+                Debug.WriteLine("Error message :: ValidationTokenHandler :: SendAsync(): " + ex.Message);
             }
             catch (Exception ex)
             {
                 statusCode = HttpStatusCode.InternalServerError;
+                Debug.WriteLine("Error message :: ValidationTokenHandler :: SendAsync(): "+ex.Message);
             }
 
             return Task<HttpResponseMessage>.Factory.StartNew(() =>

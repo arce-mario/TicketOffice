@@ -19,5 +19,6 @@ namespace ApiCatchFilms.Models
         [Required]
         [Column("old_man_price")]
         public decimal oldManPrice { get; set; }
+        public bool? valid { get; set;}
     }
 }

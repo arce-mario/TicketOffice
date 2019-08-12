@@ -3,8 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -24,7 +22,7 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage res = await client.GetAsync(String.Concat("api/functions/movie/",movieID));
+                HttpResponseMessage res = await client.GetAsync(String.Concat("api/functions/movie/", movieID));
 
                 if (res.IsSuccessStatusCode)
                 {
@@ -35,6 +33,95 @@ namespace CatchFilms.Controllers
                 statusCode = res.StatusCode;
                 Debug.WriteLine("Codigo de respuesta: " + res.StatusCode);
                 return functions;
+            }
+        }
+
+        public ActionResult Details(int? id)
+        {
+            Function function = null;
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(LoginController.BaseUrl);
+                    var responseTask = client.GetAsync(String.Concat("api/functions/", id));
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<Function>();
+                        readTask.Wait();
+                        function = readTask.Result;
+                    }
+                }
+            }
+
+            if (function == null) { return new HttpStatusCodeResult(HttpStatusCode.NotFound); }
+            return View(function);
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult Create(Function function)
+        {
+            function.functionID = null;
+
+            function.price.priceID = (function.price.priceID == 0) ? null : function.price.priceID;
+            function.room.roomID = (function.room.roomID == 0) ? null : function.room.roomID;
+
+            function.priceID = (function.priceID == 0) ? null : function.priceID;
+            function.movieID = (function.movieID == 0) ? null : function.movieID;
+            function.roomID = (function.roomID == 0) ? null : function.roomID;
+
+            function.movie.type = "Default";
+            Debug.WriteLine(String.Concat("FunctionController :: Create() :: function: ",JsonConvert.SerializeObject(function)));
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri(LoginController.BaseUrl);
+
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
+                    var postTask = client.PostAsJsonAsync<Function>("api/functions", function);
+
+                    postTask.Wait();
+                    var res = postTask.Result;
+
+                    if (res.IsSuccessStatusCode)
+                    {
+                        ViewBag.message = "Registro creado de forma correcta";
+                        return View();
+                    }
+                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToAction("unauthorized", "error");
+                    }else if (res.StatusCode == HttpStatusCode.NotAcceptable)
+                    {
+                        ModelState.AddModelError(String.Empty, "No se encontraron registro de precios por defectos");
+                    }
+
+                    Debug.WriteLine("ERROR: " + res.StatusCode);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ERROR: " + e.Message);
+                }
+                ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear el nuevo registro");
+                ModelState.AddModelError(String.Empty, "El registro de película o sala selecionado se mantienen");
+                return View();
             }
         }
     }

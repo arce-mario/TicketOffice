@@ -71,6 +71,9 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -124,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\functions.css" />
     <Content Include="Content\css\jquery.seat-charts.css" />
     <Content Include="Content\css\login.css" />
     <Content Include="Content\css\style-seats.css" />
@@ -185,6 +189,8 @@
     <Content Include="Content\images\icon-contact-user.png" />
     <Content Include="Content\images\logo%402x.png" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\placeholder-results.jpg" />
+    <Content Include="Content\images\placeholder.jpg" />
     <Content Include="Content\images\select%402x.png" />
     <Content Include="Content\images\select.png" />
     <Content Include="Scripts\app.js" />
@@ -199,7 +205,9 @@
     <Content Include="Scripts\plugins.js" />
     <Content Include="Content\css\style-home.css" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -210,9 +218,11 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CatalogType.cs" />
     <Compile Include="Models\Function.cs" />
     <Compile Include="Models\LoginUser.cs" />
     <Compile Include="Models\Movie.cs" />
@@ -230,7 +240,9 @@
     <Content Include="Views\web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.11.1.min.map" />
@@ -247,6 +259,9 @@
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
     <Content Include="Views\Movie\Create.cshtml" />
+    <Content Include="Views\Function\Details.cshtml" />
+    <Content Include="Views\Function\Create.cshtml" />
+    <Content Include="Views\Room\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -256,7 +271,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Administration\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

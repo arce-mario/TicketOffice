@@ -9,19 +9,36 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ApiCatchFilms.Controllers
 {
-    [AllowAnonymous]
-    [RoutePrefix("api/rooms")]
     public class RoomsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
 
         // GET: api/Rooms
-        public IQueryable<Room> GetRooms()
+        public IQueryable<Room> GetRooms(string name = "", int opc = 0)
         {
-            return db.Rooms;
+            if (name != "")
+            {
+                Regex re = new Regex(@"\d+");
+                Match m = re.Match(name);
+
+                if (m.Success)
+                {
+                    int value = int.Parse(m.Value);
+                    return db.Rooms.Where(rm => rm.number == value);
+                }
+                
+            }
+
+            if (opc == 0)
+            {
+                return db.Rooms;
+            }
+
+            return null;
         }
 
         [Route("{id:int}/functions")]

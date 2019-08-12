@@ -322,7 +322,6 @@
 
 			for (var i = start_value; i <= (start_value+parseInt(length)); i++) {
 				rows.push(String.fromCharCode(i));
-				console.log("Valores de la fila: ".concat(i));
 			}
 			return rows;
 		})(settings.map.length);
@@ -331,7 +330,6 @@
 		settings.naming.columns = settings.naming.columns || (function(length) {
 			var columns = [];
 			for (var i = 1; i <= length; i++) {
-				console.log(i);
 				columns.push(i);
 			}
 			return columns;
