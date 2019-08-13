@@ -23,8 +23,7 @@ namespace ApiCatchFilms.Controllers
         {
             return db.Users.Include(s => s.tickets);
         }
-
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {

@@ -1,0 +1,91 @@
+﻿@model CatchFilms.Models.Movie
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<!--<h2> Editar pelicula</h2>-->
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <!--Contenedor del formulario-->
+<div class="container">
+    <!--Estos elementos estan ocultos -->
+    <!--Validatio... se muestra cuando ocurrió un error-->
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <!--Este contiene el id de la película y por ende no se muestra-->
+    @Html.HiddenFor(model => model.movieID)        
+    <!--Creamos un div para definir la primera fila de inputs en el formulario-->
+    <div class="row">
+        <!--Creamos una columna para almacenar nuestro primer input esta tendrá untamaño del ...-->
+        <div class="col-md-4">
+            <!--Aquí ira el label que contiene el título o nombre del atributo del modelo en este caso name-->
+            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label" })<!--Eliminé col-md-2 porque esa no le daba espacio al tiltulo -->
+            <div class="form-group">
+                <!--Dentro del div form-group siempre va ir el input-->
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.classification, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.classification, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.classification, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.time, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.time, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.time, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.coverURL, htmlAttributes: new { @class = "control-label " })
+            <div class="form-group">
+                @Html.EditorFor(model => model.coverURL, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.coverURL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.imageURL, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.imageURL, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.imageURL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.rating, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.rating, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.rating, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!--Le diremos que tome todo el ancho del formulario con el valor 12 que es el máximo-->
+        <div class="col-md-12">
+            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default"/>
+            </div>
+        </div>
+
+    </div>
+</div>
+}
