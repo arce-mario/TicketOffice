@@ -84,6 +84,13 @@ namespace CatchFilms.Controllers
 
             function.movie.type = "Default";
             Debug.WriteLine(String.Concat("FunctionController :: Create() :: function: ",JsonConvert.SerializeObject(function)));
+
+            TryValidateModel(function);
+            if (!ModelState.IsValid)
+            {
+                return View(function);
+            }
+
             using (var client = new HttpClient())
             {
                 try

@@ -66,6 +66,12 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Create(Room room, string seatsList = "")
         {
+            TryValidateModel(room);
+            if (!ModelState.IsValid)
+            {
+                return View(room);
+            }
+
             using (var client = new HttpClient())
             {
                 try
