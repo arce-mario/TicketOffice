@@ -13,9 +13,9 @@ namespace CatchFilms.Models
         public int? userID { get; set; }
         [DisplayName("Nombre")]
         [Required (ErrorMessage = "El nombre es un campo requerido.")]
-        [DisplayName("Apellido")]
         public string firstName { get; set; }
         [Required(ErrorMessage = "El apellido es un campo requerido.")]
+        [DisplayName("Apellido")]
         public string lastName { get; set; }
         [Required(ErrorMessage = "El email es un campo requerido.")]
         [DataType(DataType.EmailAddress)]
