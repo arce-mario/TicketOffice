@@ -154,7 +154,50 @@ namespace CatchFilms.Controllers
             }
         }
 
+        // CONTINUAR EDIT
+        public ActionResult Edit(int id )
+        {
+            Movie movie = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
 
+                var responseTask = client.GetAsync("api/movies/" + id.ToString());
+                responseTask.Wait();
 
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<Movie>();
+                    readTask.Wait();
+                    movie = readTask.Result;
+                }
+
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost]
+         public ActionResult Edit(Movie movie)
+        {
+            movie.type = "default";
+            using (var client = new HttpClient())
+            {
+                Debug.WriteLine("Registro: "+JsonConvert.SerializeObject(movie));
+
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var putTask = client.PutAsJsonAsync($"api/movies/{movie.movieID}", movie);
+                putTask.Wait();
+                var result = putTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Edit");
+                }
+                Debug.WriteLine("Codigo de error: "+result.StatusCode);   
+            }
+            return View(movie);
+        }
+           
     }
 }
