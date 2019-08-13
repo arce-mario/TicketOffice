@@ -50,7 +50,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // PUT: api/Movies/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+       
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMovie(int id, Movie movie)
         {
@@ -86,7 +86,7 @@ namespace ApiCatchFilms.Controllers
         }
 
         // POST: api/Movies
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+       
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> PostMovie(Movie movie)
         {
