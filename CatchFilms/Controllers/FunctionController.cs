@@ -124,5 +124,47 @@ namespace CatchFilms.Controllers
                 return View();
             }
         }
+
+        public ActionResult ProfileUser(int id)
+        {
+            User user = new User();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var responseTask = client.GetAsync(String.Concat("api/users/", id));
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<User>();
+                    readTask.Wait();
+                    user = readTask.Result;
+
+                }
+                Debug.WriteLine(result.StatusCode + "holis");
+            }
+            
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult ProfileUser(User Users)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var putTask = client.PutAsJsonAsync($"api/apiCatchFilms/{Users.userID}", Users);
+                putTask.Wait();
+
+                var result = putTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(Users);
+        }
+
     }
 }

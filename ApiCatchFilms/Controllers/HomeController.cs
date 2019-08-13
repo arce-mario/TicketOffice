@@ -11,5 +11,6 @@ namespace ApiCatchFilms.Controllers
             ViewBag.serverTime = DateTime.UtcNow;
             return View();
         }
+
     }
 }
