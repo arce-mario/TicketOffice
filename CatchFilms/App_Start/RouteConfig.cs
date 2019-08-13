@@ -23,6 +23,11 @@ namespace CatchFilms
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                name: "Rooms",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Room", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }
