@@ -1,0 +1,91 @@
+﻿@model CatchFilms.Models.User
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="container">
+    <div class="row" style="line-height:25px;">
+        <div class="col-md-4">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.firstName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.firstName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.lastName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.lastName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.hireDare)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.hireDare)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.userName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.userName)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.pass)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.pass)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.birthDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.birthDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.rol)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.rol)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.imageUserURL)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.imageUserURL)
+                </dd>
+            </dl>
+            <button type="button" class="btn btn-warning">Editar usuario</button>
+            <button type="button" class="btn btn-warning">Index</button>
+        </div>
+    </div>
+</div>
