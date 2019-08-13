@@ -14,6 +14,7 @@ namespace CatchFilms.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? roomID { get; set; }
         [DisplayName("Número de sala")]
+        [MinLength(1, ErrorMessage = "El número de sala debe ser mayor a 0.")]
         public int number { get; set; }
         [DisplayName("Descripción")]
         public String description { get; set; }

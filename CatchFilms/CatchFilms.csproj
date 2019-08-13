@@ -258,8 +258,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Public\SelectSeats.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
-    <Content Include="Views\Home\SignUp.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Login\SignUp.cshtml" />
+    <Content Include="Views\Login\SignIn.cshtml" />
     <Content Include="Views\Movie\Billboard.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
     <Content Include="Views\Movie\Details.cshtml" />
