@@ -14,6 +14,8 @@ namespace ApiCatchFilms.Models
         [Required]
         public int column { get; set; }
         [Required]
-        public char row { get; set; }
+        public string row { get; set; }
+        [NotMapped]
+        public int status { get; set; }
     }
 }
