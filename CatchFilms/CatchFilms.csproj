@@ -270,6 +270,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Function\ProfileUser.cshtml" />
     <Content Include="Views\Movie\Edit.cshtml" />
+    <Content Include="Views\Function\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
