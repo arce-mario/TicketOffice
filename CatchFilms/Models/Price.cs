@@ -10,13 +10,16 @@ namespace CatchFilms.Models
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? priceID { get; set; }
-        [MinLength(1, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Required(ErrorMessage = "Este campo es requerido.")]
         [DisplayName("Precio para adultos")]
         public decimal adultPrice { set; get; }
-        [MinLength(1, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Required(ErrorMessage = "Este campo es requerido.")]
         [DisplayName("Precio para niños")]
         public decimal childPrice { get; set; }
-        [MinLength(1, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
+        [Required(ErrorMessage = "Este campo es requerido.")]
         [DisplayName("Precio para la tercera edad")]
         public decimal oldManPrice { get; set; }
     }
