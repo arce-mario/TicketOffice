@@ -18,7 +18,7 @@ namespace ApiCatchFilms.Controllers
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
 
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        [Authorize]
         public IQueryable<User> GetUsers()
         {
             return db.Users.Include(s => s.tickets);
@@ -36,7 +36,7 @@ namespace ApiCatchFilms.Controllers
             return Ok(user);
         }
 
-        // PUT: api/Users/5
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutUser(int id, User user)
         {
@@ -87,7 +87,7 @@ namespace ApiCatchFilms.Controllers
             return CreatedAtRoute("DefaultApi", new { id = user.userID }, user);
         }
 
-        // DELETE: api/Users/5
+        [Authorize]
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> DeleteUser(int id)
         {

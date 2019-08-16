@@ -14,7 +14,7 @@
         <div class="col-md-12"><div class="section-title">@ViewBag.Title</div><br /></div>
     </div>
 
-    @using (@Html.BeginForm("edit", "room", FormMethod.Post, new { id = "frmId"}))
+    @using (@Html.BeginForm("EditReg", "room", FormMethod.Post, new { id = "frmId"}))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.roomID, new { htmlAttributes = new { @class = "form-control" } })

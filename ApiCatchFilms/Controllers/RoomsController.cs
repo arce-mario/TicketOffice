@@ -18,8 +18,7 @@ namespace ApiCatchFilms.Controllers
     public class RoomsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
-
-        // GET: api/Rooms
+        
         public IQueryable<Room> GetRooms(string name = "", int opc = 0)
         {
             if (name != "")
@@ -62,7 +61,7 @@ namespace ApiCatchFilms.Controllers
             return Ok(room);
         }
 
-        // PUT: api/Rooms/5
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutRoom(int id, Room room, string notAvailable = "")
         {
@@ -140,7 +139,7 @@ namespace ApiCatchFilms.Controllers
 
             return result;
         }
-
+        [Authorize]
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> PostRoom(Room room, string listSeats = "")
         {
@@ -203,7 +202,7 @@ namespace ApiCatchFilms.Controllers
             return listSeats;
         }
 
-        // DELETE: api/Rooms/5
+        [Authorize]
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> DeleteRoom(int id)
         {

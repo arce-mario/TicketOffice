@@ -118,7 +118,7 @@ namespace CatchFilms.Controllers
         public ActionResult Edit(int id)
         {
             validationAuntentication(1);
-
+            ViewBag.InfoMessage = TempData["InfoMessage"];
             Function function = null;
             using (var client = new HttpClient())
             {
@@ -163,6 +163,7 @@ namespace CatchFilms.Controllers
                 var result = putTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
+                    TempData["InfoMessage"] = "Datos modificados correctamente";
                     return RedirectToAction("Edit");
                 }
                 Debug.WriteLine("Codigo de error: " + result.StatusCode);

@@ -113,7 +113,7 @@ namespace CatchFilms.Controllers
         }
         
         [HttpPost]
-        public ActionResult Edit(Room room)
+        public ActionResult EditReg(Room room)
         {
             validationAuntentication(1);
 
@@ -142,7 +142,7 @@ namespace CatchFilms.Controllers
                 var putTask = client.PutAsJsonAsync(uri, room);
                 putTask.Wait();
                 var result = putTask.Result;
-
+                Debug.WriteLine("Code: "+result.StatusCode);
                 switch (result.StatusCode)
                 {
                     case HttpStatusCode.OK:

@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 namespace ApiCatchFilms.Controllers
 {
-    [AllowAnonymous]
     public class MoviesController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -67,8 +66,7 @@ namespace ApiCatchFilms.Controllers
             return Ok(movie);
         }
 
-        // PUT: api/Movies/5
-       
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMovie(int id, Movie movie)
         {
@@ -103,8 +101,7 @@ namespace ApiCatchFilms.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Movies
-       
+        [Authorize]
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> PostMovie(Movie movie)
         {
@@ -118,8 +115,7 @@ namespace ApiCatchFilms.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = movie.movieID }, movie);
         }
-
-        // DELETE: api/Movies/5
+        [Authorize]
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> DeleteMovie(int id)
         {

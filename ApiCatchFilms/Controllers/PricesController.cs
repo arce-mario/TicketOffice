@@ -17,14 +17,12 @@ namespace ApiCatchFilms.Controllers
     public class PricesController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
-
-        // GET: api/Prices
+        
         public IQueryable<Price> GetPrices()
         {
             return db.Prices;
         }
-
-        // GET: api/Prices/5
+        
         [ResponseType(typeof(Price))]
         public async Task<IHttpActionResult> GetPrice(int id)
         {
@@ -36,8 +34,7 @@ namespace ApiCatchFilms.Controllers
 
             return Ok(price);
         }
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
-        // PUT: api/Prices/5
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPrice(int id, Price price)
         {
@@ -72,8 +69,7 @@ namespace ApiCatchFilms.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Prices
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        [Authorize]
         [ResponseType(typeof(Price))]
         public async Task<IHttpActionResult> PostPrice(Price price)
         {
@@ -88,8 +84,7 @@ namespace ApiCatchFilms.Controllers
             return CreatedAtRoute("DefaultApi", new { id = price.priceID }, price);
         }
 
-        // DELETE: api/Prices/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        [Authorize]
         [ResponseType(typeof(Price))]
         public async Task<IHttpActionResult> DeletePrice(int id)
         {

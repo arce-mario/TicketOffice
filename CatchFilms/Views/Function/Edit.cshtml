@@ -1,7 +1,10 @@
 ﻿@model CatchFilms.Models.Function
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar datos de la función";
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    CatalogType types = new CatalogType();
+    types.init();
 }
 
 <h2>Edit</h2>
@@ -10,81 +13,79 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
+    @Html.TextBoxFor(model => model.movieID, new { type = "hidden" })
+    @Html.TextBoxFor(model => model.roomID, new { type = "hidden" })
+    @Html.TextBoxFor(model => model.priceID, new { type = "hidden" })
+    @Html.TextBoxFor(model => model.functionID, new { type = "hidden" })
+    <div class="container">
+        <div class="content">
+            <div class="page">
+                <div class="breadcrumbs">
+                    @Html.ActionLink("Inicio", "index", new { controller = "home" })
+                    @Html.ActionLink("Películas", "index", new { controller = "movie" })
+                    <span>@ViewBag.Title</span>
+                </div>
 
-    <div class="form-horizontal">
-        <h4>Function</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.functionID)
+                <h5 class="section-title">@ViewBag.Title</h5>
+                <div class="row">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="col-md-12">@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })<br /></div>
+                    }
+                    @if (ViewBag.InfoMessage != null && ViewBag.InfoMessage != "")
+                    {
+                        <div class="col-md-12">
+                            <div class="alert alert-success">
+                                <strong>Finalizado! </strong>@ViewBag.InfoMessage
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.movieID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.movieID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.movieID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.time, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.time, new { htmlAttributes = new { @class = "form-control", type = "datetime-local" } })
+                            @Html.ValidationMessageFor(model => model.time, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.roomID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.roomID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.roomID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.priceID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.priceID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.priceID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.time, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.time, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.time, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.type, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.typeMovie, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.typeMovie, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.typeMovie, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.type, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.type, types.getFunctionsTypes, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.typeMovie, htmlAttributes: new { @class = "control-label" })
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.typeMovie, types.getMoviesTypes, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.typeMovie, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @if (ViewBag.InfoMessage != null)
+                    {
+                        <div class="col-md-12">
+                            <div class="alert alert-success">
+                                <strong>Finalizado! </strong>@ViewBag.InfoMessage
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-12">
+                        <button type="submit">Aplicar cambios</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }
