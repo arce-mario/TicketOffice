@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CatchFilms.Models.Movie>
+
+@{
+    ViewBag.Title = "Películas registradas";
+}
+<div class="container">
+    <div class="page">
+        <div class="breadcrumbs">
+            @Html.ActionLink("Inicio", "index", new { controller = "home" })
+            <span>Películas</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5 class="section-title">@ViewBag.Title</h5>
+        </div>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert">
+                    <strong>Alerta!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        }
+        @if (ViewBag.InfoMessage != null)
+            {
+            <div class="col-md-12">
+                <div class="alert alert-primary" role="alert">
+                    <strong>Finalizado!</strong> @ViewBag.InfoMessage
+                </div>
+            </div>
+        }
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="card" style="margin-bottom: 25px;">
+                    <div class="card-body">
+                        <h3 class="card-title">@item.name</h3>
+                        <h4 class="card-subtitle mb-2 text-muted">Descripcion:</h4>
+                        <p class="card-text">@item.description</p>
+                        <strong><a href="@Url.Action("edit","movie", new { @id = item.movieID})" class="card-link">Detalles</a></strong>
+                        @if (item.status > 0)
+                        {
+                            <label class="card-link rounded bg-success text-light small" style="padding: 4px;">Funciones asociadas: @item.status</label>
+                        }
+                        else
+                        {
+                            <strong><a href="@Url.Action("delete","movie", new { @id = item.movieID})" class="card-link text-danger">Eliminar</a></strong>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

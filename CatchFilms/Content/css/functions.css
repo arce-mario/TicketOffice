@@ -8,8 +8,8 @@
     padding: 15px;
     margin-bottom: 10px;
 }
-.select-room{
-    max-height: 166px;
+.select-room {
+    max-height: 141px;
     overflow: auto;
 }
 .without_ampm::-webkit-datetime-edit-ampm-field {

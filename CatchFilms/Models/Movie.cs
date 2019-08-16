@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +29,13 @@ namespace CatchFilms.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [DisplayName("Imagen de la película")]
         public string imageURL { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int status { get; set; }
         public float rating { get; set; }
+        //Esto campos son generados automaticamente, en algunos casos calculados, no forman parte de la entidad en la base datos
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<Function> functions { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string moviePremier { get; set; }
     }
 }

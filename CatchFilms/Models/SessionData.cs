@@ -13,5 +13,6 @@ namespace CatchFilms.Models
         public string nameID { get; set; }
         public string String { get; set; }
         public string email { get; set; }
+        public int  userID { get; set; }
     }
 }

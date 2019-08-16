@@ -1,8 +1,8 @@
-﻿@model dynamic 
+﻿@model CatchFilms.Models.Movie
 
 @{
-    ViewBag.Title = String.Concat("Detalles de ",Model.movie.name);
-    float rating = @Model.movie.rating;
+    ViewBag.Title = String.Concat("Detalles de ",Model.name);
+    float rating = @Model.rating;
     float porcent = (rating * 100)/ 5;
 }
 <div class="container">
@@ -10,17 +10,17 @@
         <div class="breadcrumbs">
             @Html.ActionLink("Inicio","index",new {controller = "home"})
             @Html.ActionLink("Películas", "billboard", new {controller = "movie" })
-            <span>@Model.movie.name</span>
+            <span>@Model.name</span>
         </div>
         <div class="content">
             <div class="row">
                 <div class="col-md-6" style="max-height: 400px;">
-                    <figure class="movie-poster"><img src="~/Content/images/movie-croods-slide.jpg" alt="#"></figure>
+                    <figure class="movie-poster"><img src="~/Content/images/@((Model.coverURL != null)? Model.coverURL : "placeholder.jpg")" alt="#"></figure>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="movie-title">@Model.movie.name</h2>
+                    <h2 class="movie-title">@Model.name</h2>
                     <div class="movie-summary">
-                        <p>@Model.movie.description</p>
+                        <p>@Model.description</p>
                     </div>
                     <ul class="movie-meta">
                         <li>
@@ -31,9 +31,9 @@
                                 </span>
                             </div>
                         </li>
-                        <li><strong>Duración:</strong> @Model.movie.time</li>
-                        <li><strong>Premier:</strong> @Model.moviePremier</li>
-                        <li><strong>Categoria:</strong> @Model.movie.classification</li>
+                        <li><strong>Duración:</strong> @Model.time</li>
+                        <li><strong>Premier:</strong> @((Model.moviePremier != null)? Model.moviePremier : "No aplica")</li>
+                        <li><strong>Categoria:</strong> @Model.classification</li>
                     </ul>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     {
                         <li>
                             <div class="date">@item.time.ToString("MM/dd")</div>
-                            <h2 class="entry-title"><a href="@Url.Action("index","function")/@item.functionID">@item.description</a></h2>
+                            <h2 class="entry-title"><a href="@Url.Action("details","function")/@item.functionID">@item.description</a></h2>
                         </li>
                     }
                     </ul>

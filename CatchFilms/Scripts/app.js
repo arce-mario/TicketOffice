@@ -8,20 +8,19 @@
 		$(".menu-toggle").click(function(){
 			$(".mobile-navigation").slideToggle();
 		});
-		$(".search-form button").click(function(){
+        $(".search-form button").click(function () {
+
 			$(this).toggleClass("active");
             var $parent = $(this).parent(".search-form");
             $parent.find("input").toggleClass("active").focus();
 
             if (!$(this).hasClass("active")) {
-                $('.search-form').attr('action', '/movie/searchmovies');
                 $('.search-form').submit(); 
             }
         });
 
         $("#search_movie").on('keyup', function (e) {
             if (e.keyCode == 13) {
-                $('.search-form').attr('action', '/movie/searchmovies');
                 $('.search-form').submit(); 
             }
         });

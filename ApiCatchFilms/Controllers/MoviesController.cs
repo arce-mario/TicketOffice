@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using ApiCatchFilms.Models;
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace ApiCatchFilms.Controllers
 {
@@ -34,16 +35,33 @@ namespace ApiCatchFilms.Controllers
             {
                 return db.Movies.Where(m => (db.Functions.Where(f => (f.movieID == m.movieID) && f.time >= DateTime.UtcNow).Count() >= 1));
             }
+
+            if (opc == 1)
+            {
+                List<Movie> movies = db.Movies.ToList();
+                movies.ForEach(m => m.status = (db.Functions.Where(f => (f.movieID == m.movieID)).Count()));
+                return movies.AsQueryable();
+            }
             return null;
         }
         // GET: api/Movies/5
         [ResponseType(typeof(Movie))]
-        public async Task<IHttpActionResult> GetMovie(int id)
+        public async Task<IHttpActionResult> GetMovie(int id, int opc = 0)
         {
             Movie movie = await db.Movies.FindAsync(id);
             if (movie == null)
             {
                 return NotFound();
+            }
+
+            switch (opc)
+            {
+                case 0:
+                    movie.functions = db.Functions.Where(f => f.movieID == movie.movieID && f.time >= DateTime.UtcNow).ToList();
+                    break;
+                case 1:
+                    movie.functions = db.Functions.Where(f => f.movieID == movie.movieID).ToList();
+                    break;
             }
 
             return Ok(movie);
@@ -102,7 +120,6 @@ namespace ApiCatchFilms.Controllers
         }
 
         // DELETE: api/Movies/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> DeleteMovie(int id)
         {
@@ -111,11 +128,13 @@ namespace ApiCatchFilms.Controllers
             {
                 return NotFound();
             }
-
-            db.Movies.Remove(movie);
-            await db.SaveChangesAsync();
-
-            return Ok(movie);
+            else if (db.Functions.Where(fn => fn.movieID == movie.movieID).Count() == 0)
+            {
+                db.Movies.Remove(movie);
+                await db.SaveChangesAsync();
+                return Ok(movie);
+            }
+            return StatusCode(HttpStatusCode.NotAcceptable);
         }
 
         protected override void Dispose(bool disposing)

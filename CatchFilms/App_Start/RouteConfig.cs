@@ -14,19 +14,9 @@ namespace CatchFilms
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "SignIn",
-                url: "signin",
-                defaults: new { controller = "Login", action = "ValidateUser"}
-            );
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
-            routes.MapRoute(
-                name: "Rooms",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Room", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

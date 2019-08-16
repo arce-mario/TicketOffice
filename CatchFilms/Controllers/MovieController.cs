@@ -16,6 +16,29 @@ namespace CatchFilms.Controllers
 {
     public class MovieController : Controller
     {
+
+        public async Task<ActionResult> Index()
+        {
+            List<Movie> Movies = new List<Movie>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage res = await client.GetAsync("api/movies?opc=1");
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var response = res.Content.ReadAsStringAsync().Result;
+                    Debug.WriteLine(response);
+                    Movies = JsonConvert.DeserializeObject<List<Movie>>(response);
+                    ViewBag.InfoMessage = TempData["InfoMessage"];
+                    ViewBag.ErrorMessage = TempData["ErrorMessage"];
+                }
+                return View(Movies);
+            }
+        }
+
         public async Task<ActionResult> Billboard()
         {
             List<Movie> Movies = new List<Movie>();
@@ -37,39 +60,43 @@ namespace CatchFilms.Controllers
             }
         }
 
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int id)
         {
-            dynamic models = new ExpandoObject();
-            HttpStatusCode statusCode = HttpStatusCode.Unauthorized;
-
+            Movie movie = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-                var responseTask = client.GetAsync(String.Concat("api/movies/", id));
+                var responseTask = client.GetAsync($"api/movies/{id}");
                 var result = responseTask.Result;
 
-                if (result.IsSuccessStatusCode)
+                switch (result.StatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<Movie>();
-                    readTask.Wait();
-                    models.movie = readTask.Result;
-                    List<Function> functions = await new FunctionController().List(statusCode, models.movie.movieID);
-                    models.functions = functions;
-                    models.moviePremier = functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
-                }
-                else if (result.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return HttpNotFound();
+                    case HttpStatusCode.OK:
+                        var readTask = result.Content.ReadAsAsync<Movie>();
+                        readTask.Wait();
+                        movie = readTask.Result;
+
+                        if (movie.functions != null)
+                        {
+                            if (movie.functions.Count() > 0)
+                            {
+                                movie.moviePremier = movie.functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
+                            }
+                        }
+                        break;
+                    case HttpStatusCode.NotFound:
+                        return HttpNotFound();
+                    default:
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
                 Debug.WriteLine("Codigo: "+ result.StatusCode);
-                
             }
-
-            return View(models);
-        }
+            return View(movie);
+        }  
 
         public ActionResult Create()
         {
+            ViewBag.InfoMessage = TempData["InfoMessage"];
             return View();
         }
 
@@ -77,40 +104,34 @@ namespace CatchFilms.Controllers
         public ActionResult Create(Movie movie)
         {
             movie.movieID = null;
+            movie.type = "default";
             Debug.WriteLine(JsonConvert.SerializeObject(movie));
 
             using (var client = new HttpClient())
             {
-                try
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+
+                if (Session["userAutentication"] != null)
                 {
-                    client.BaseAddress = new Uri(LoginController.BaseUrl);
-
-                    if (Session["userAutentication"] != null)
-                    {
-                        client.DefaultRequestHeaders.Authorization = new
-                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
-                    }
-                    var postTask = client.PostAsJsonAsync<Movie>("api/movies", movie);
-
-                    postTask.Wait();
-                    var res = postTask.Result;
-
-                    if (res.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("create", "movie");
-                    }
-                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        return RedirectToAction("unauthorized", "error");
-                    }
-
-                    Debug.WriteLine("ERROR: " + res.StatusCode);
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
                 }
-                catch (Exception e)
+                var postTask = client.PostAsJsonAsync<Movie>("api/movies", movie);
+
+                postTask.Wait();
+                var res = postTask.Result;
+
+                if (res.StatusCode == HttpStatusCode.Created)
                 {
-                    Debug.WriteLine("ERROR: " + e.Message);
+                    TempData["InfoMessage"] = String.Concat("Película ",movie.name, " registrada correctamente");
+                    return RedirectToAction("create", "movie");
+                }
+                else if (res.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToAction("unauthorized", "error");
                 }
 
+                Debug.WriteLine("ERROR: " + res.StatusCode);
                 ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear una nueva pelicula");
                 return RedirectToAction("create", "movie");
             }
@@ -154,32 +175,42 @@ namespace CatchFilms.Controllers
             }
         }
 
-        // CONTINUAR EDIT
         public ActionResult Edit(int id )
         {
             Movie movie = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-
-                var responseTask = client.GetAsync("api/movies/" + id.ToString());
-                responseTask.Wait();
-
+                var responseTask = client.GetAsync($"api/movies/{id}?opc=1");
                 var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
+
+                switch (result.StatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<Movie>();
-                    readTask.Wait();
-                    movie = readTask.Result;
+                    case HttpStatusCode.OK:
+                        var readTask = result.Content.ReadAsAsync<Movie>();
+                        readTask.Wait();
+                        movie = readTask.Result;
+
+                        if (movie.functions != null)
+                        {
+                            if (movie.functions.Count() > 0)
+                            {
+                                movie.moviePremier = movie.functions.First().time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"));
+                            }
+                        }
+                        break;
+                    case HttpStatusCode.NotFound:
+                        return HttpNotFound();
+                    default:
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-
+                Debug.WriteLine("Codigo: " + result.StatusCode);
             }
-
             return View(movie);
         }
 
         [HttpPost]
-         public ActionResult Edit(Movie movie)
+        public ActionResult Edit(Movie movie)
         {
             movie.type = "default";
             TryValidateModel(movie);
@@ -204,6 +235,39 @@ namespace CatchFilms.Controllers
             }
             return View(movie);
         }
-           
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var deleteTask = client.DeleteAsync($"api/movies/{id}");
+                deleteTask.Wait();
+
+                var result = deleteTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var response = result.Content.ReadAsStringAsync().Result;
+                    Movie movie = JsonConvert.DeserializeObject<Movie>(response);
+                    TempData["InfoMessage"] = String.Concat("Película: ", movie.name, ", eliminada correctamente.");
+                    return RedirectToAction("index", "movie");
+                }
+                else if (result.StatusCode == HttpStatusCode.NotAcceptable)
+                {
+                    TempData["ErrorMessage"] = "Error el registro no puede ser eliminado, porque este recurso está siendo utilizado por el sistema";
+                    return RedirectToAction("index", "movie");
+                }
+                else if (result.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    TempData["ErrorMessage"] = "Error el registro no puede ser eliminado, <strong>porque este recurso no existe</strong>";
+                    return RedirectToAction("index", "movie");
+                }
+                TempData["ErrorMessage"] = "Error interno del sistema, no se tuvo acceso al recurso solicitado";
+                return RedirectToAction("index", "movie");
+            }
+        }
+
     }
 }

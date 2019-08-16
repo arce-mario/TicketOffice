@@ -40,5 +40,8 @@ namespace ApiCatchFilms.Models
         public string imageURL { get; set; }
         [Required]
         public float rating { get; set; }
+        [NotMapped]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<Function> functions { get; set; }
     }
 }

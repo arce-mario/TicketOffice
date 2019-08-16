@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -10,16 +10,13 @@ namespace CatchFilms.Models
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? priceID { get; set; }
-        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
-        [Required(ErrorMessage = "Este campo es requerido.")]
+        [Range(1, 100000, ErrorMessage = "El valor debe ser mayor a 0")]
         [DisplayName("Precio para adultos")]
         public decimal adultPrice { set; get; }
-        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
-        [Required(ErrorMessage = "Este campo es requerido.")]
+        [Range(1, 100000, ErrorMessage = "El valor debe ser mayor a 0")]
         [DisplayName("Precio para niños")]
         public decimal childPrice { get; set; }
-        [Range(1, 100000, ErrorMessage = "El precio debe ser mayor a 0.")]
-        [Required(ErrorMessage = "Este campo es requerido.")]
+        [Range(1, 100000, ErrorMessage = "El valor debe ser mayor a 0")]
         [DisplayName("Precio para la tercera edad")]
         public decimal oldManPrice { get; set; }
     }

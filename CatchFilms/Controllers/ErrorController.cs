@@ -9,7 +9,7 @@ namespace CatchFilms.Controllers
     public class ErrorController : Controller
     {
         // GET: Error
-        public ActionResult Index()
+        public ActionResult NotFound()
         {
             //Esto permite indicarle al cliente web el código de respuesta 404
             Response.StatusCode = 404;
@@ -22,5 +22,12 @@ namespace CatchFilms.Controllers
             Response.StatusCode = 401;
             return View();
         }
+        public ActionResult InternalServerError()
+        {
+            //Esto permite indicarle al cliente web el código de respuesta 500
+            Response.StatusCode = 500;
+            return View();
+        }
+
     }
 }

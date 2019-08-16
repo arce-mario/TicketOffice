@@ -86,6 +86,7 @@ namespace ApiCatchFilms.Controllers
                 new Claim("lastName", usuarioInfo.firstName),
                 new Claim("firstName", usuarioInfo.lastName),
                 new Claim("rolID", usuarioInfo.rol.ToString()),
+                new Claim("userID", usuarioInfo.userID.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, usuarioInfo.email),
                 new Claim(ClaimTypes.Role, rol)
             };

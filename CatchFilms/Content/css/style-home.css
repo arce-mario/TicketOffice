@@ -380,7 +380,7 @@ form textarea {
 
 .breadcrumbs {
   padding-bottom: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   border-bottom: 1px solid #ebebeb; }
   .breadcrumbs a {
     font-weight: 400;
@@ -1703,3 +1703,4 @@ ul.arrow {
       color: #ffaa3c; }
   .site-footer .colophon {
     padding-top: 30px; }
+

@@ -19,7 +19,7 @@
                     @Html.ActionLink(item.name,"details", new { @id = item.movieID })
                 </div>
                 <p>
-                    @String.Concat(item.description.Substring(0, 68),"...")
+                    @((item.description.Length >= 68)? String.Concat(item.description.Substring(0, 68), "..."): item.description)
                 </p>
             </div>
         }

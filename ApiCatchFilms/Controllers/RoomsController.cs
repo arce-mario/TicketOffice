@@ -30,7 +30,7 @@ namespace ApiCatchFilms.Controllers
                 if (m.Success)
                 {
                     int value = int.Parse(m.Value);
-                    return db.Rooms.Where(rm => rm.number == value);
+                    return db.Rooms.Where(rm => rm.number == value && db.Functions.Where(f => f.roomID == rm.roomID && f.time >= DateTime.UtcNow).Count() == 0);
                 }
                 
             }
@@ -58,14 +58,13 @@ namespace ApiCatchFilms.Controllers
             {
                 return NotFound();
             }
-
+            room.roomSeats = db.RoomSeats.Where(r => r.roomID == room.roomID).Include(r => r.seat).ToList();
             return Ok(room);
         }
 
         // PUT: api/Rooms/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutRoom(int id, Room room)
+        public async Task<IHttpActionResult> PutRoom(int id, Room room, string notAvailable = "")
         {
             if (!ModelState.IsValid)
             {
@@ -78,10 +77,18 @@ namespace ApiCatchFilms.Controllers
             }
 
             db.Entry(room).State = EntityState.Modified;
-
             try
             {
                 await db.SaveChangesAsync();
+                if (notAvailable != "")
+                {
+                    bool result = changeSeatsStatus(notAvailable);
+
+                    if (!result)
+                    {
+                        return StatusCode(HttpStatusCode.NotAcceptable);
+                    }
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -98,10 +105,48 @@ namespace ApiCatchFilms.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        public bool changeSeatsStatus(string notAvailable)
+        {
+            List<string> seats = JsonConvert.DeserializeObject<List<string>>(notAvailable);
+            bool result = true;
+            foreach (string identity in seats)
+            {
+                string[] seatData = identity.Split('_');
+                int cdata = int.Parse(seatData[1]);
+                string rdata = seatData[0];
+
+                RoomSeat roomSeat = db.RoomSeats
+                    .Include(r => r.seat)
+                    .Where( r =>
+                        r.seat.column == cdata &&
+                        r.seat.row == rdata &&
+                        db.Tickets.Where(t => 
+                            t.roomSeatID == r.roomSeatID &&
+                            db.Functions.Where(f => f.functionID == t.functionID && f.time >= DateTime.UtcNow).Count() == 0
+                        ).Count() == 0
+                    ).FirstOrDefault();
+
+                if (roomSeat != null)
+                {
+                    roomSeat.status = (roomSeat.status == 1) ? 2 : 1;
+                    db.Entry(roomSeat).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
         [ResponseType(typeof(Room))]
         public async Task<IHttpActionResult> PostRoom(Room room, string listSeats = "")
         {
             List<Seat> seats = getSeats(listSeats);
+            List<RoomSeat> roomSeats = new List<RoomSeat>();
+            List<Seat> seatsSave = new List<Seat>();
 
             if (!ModelState.IsValid || seats == null)
             {
@@ -111,33 +156,31 @@ namespace ApiCatchFilms.Controllers
             db.Rooms.Add(room);
             await db.SaveChangesAsync();
             List<Seat> seatsDB = await db.Seats.OrderBy(s => s.seatID).ToListAsync();
-            List<RoomSeat> roomSeats = new List<RoomSeat>();
             
-            int max = seatsDB.Count;
-            int min = seats.Count;
+            int max = seatsDB.Count();
+            int min = seats.Count();
 
             if (min > max)
             {
-                seats.RemoveRange(0, max);
-                db.Seats.AddRange(seats);
+                int columns = seatsDB.Where(s => s.row == "A").Count();
+                int rows = seatsDB.Where(s => s.column == 1).Count();
+
+                seatsSave = seats.Where(s => (int)s.row.ToCharArray()[0] > (rows + 64) || s.column > columns).ToList();
+                //Guardamos los registros de nuevas butacas
+                db.Seats.AddRange(seatsSave);
                 await db.SaveChangesAsync();
-
-                seatsDB = await db.Seats.OrderBy(s => s.seatID).ToListAsync();
-
-                foreach (Seat seat in seatsDB)
-                {
-                    roomSeats.Add(new RoomSeat() { roomID = room.roomID, seatID = seat.seatID, status = 1});
-                }
             }
             else
             {
-                seats = seatsDB.GetRange(0, min);
-                foreach (Seat seat in seats)
-                {
-                    roomSeats.Add(new RoomSeat() { roomID = room.roomID, seatID = seat.seatID, status = 1});
-                }
-            }
+                int columns = seats.Where(s => s.row == "A").Count();
+                int rows = seats.Where(s => s.column == 1).Count();
 
+                seatsSave = seatsDB.Where(s => (int)s.row.ToCharArray()[0] <= (rows + 64) && s.column <= columns).ToList();
+            }
+            foreach (Seat seat in seatsSave)
+            {
+                roomSeats.Add(new RoomSeat() { roomID = room.roomID, seatID = seat.seatID, status = 1 });
+            }
             db.RoomSeats.AddRange(roomSeats);
             await db.SaveChangesAsync();
             return CreatedAtRoute("DefaultApi", new { id = room.roomID }, room);
@@ -151,14 +194,12 @@ namespace ApiCatchFilms.Controllers
 
             for (int i = 0; i < seats.LongCount(); i++)
             {
-                string row = Convert.ToChar(primaryASCII++).ToString();
-
+                string rowTemp = Convert.ToChar(primaryASCII++).ToString();
                 for (int c = 0; c < seats.ElementAt(i).Length; c++)
                 {
-                    listSeats.Add(new Seat() { row = row, column = (c + 1) });
+                    listSeats.Add(new Seat() { row = rowTemp, column = (c + 1) });
                 }
             }
-            Debug.WriteLine("Butacas: " + JsonConvert.SerializeObject(listSeats));
             return listSeats;
         }
 
