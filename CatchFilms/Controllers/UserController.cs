@@ -10,12 +10,19 @@ namespace CatchFilms.Controllers
 {
     public class UserController : Controller
     {
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
             validationAuntentication(2);
+
+            int id = 0;
+
             SessionData login = (SessionData)Session["sessionData"];
 
-            if (login.userID != id)
+            if (login != null)
+            {
+                id = login.userID;
+            }
+            else
             {
                 return RedirectToAction("Unauthorized", "error");
             }
@@ -119,7 +126,7 @@ namespace CatchFilms.Controllers
             }
             else
             {
-                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+                if (Session["sessionData"] == null) { return RedirectToAction("Unauthorized", "error"); }
             }
             return null;
         }

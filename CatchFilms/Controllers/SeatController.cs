@@ -176,7 +176,7 @@ namespace CatchFilms.Controllers
             }
             else
             {
-                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+                if (Session["sessionData"] == null) { return RedirectToAction("Unauthorized", "error"); }
             }
             return null;
         }

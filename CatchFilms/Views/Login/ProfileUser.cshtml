@@ -51,29 +51,12 @@
         </div>
         <div class="col-md-4">
             <dl>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.pass)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.pass)
-                </dd>
-
                 <dt>
                     @Html.DisplayNameFor(model => model.birthDate)
                 </dt>
 
                 <dd>
                     @Html.DisplayFor(model => model.birthDate)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.rol)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.rol)
                 </dd>
 
                 <dt>
@@ -84,8 +67,8 @@
                     @Html.DisplayFor(model => model.imageUserURL)
                 </dd>
             </dl>
-            <button type="button" class="btn btn-warning">Editar usuario</button>
-            <button type="button" class="btn btn-warning">Index</button>
+            <a  href="@Url.Action("edit","user")" style="margin-right:10px;" class="btn btn-warning">Editar usuario</a>
+            <a  href="@Url.Action("index","home")" class="btn btn-warning">Inicio</a>
         </div>
     </div>
 </div>

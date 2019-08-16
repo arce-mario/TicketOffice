@@ -147,13 +147,13 @@ namespace CatchFilms.Controllers
                 {
                     case HttpStatusCode.OK:
                         TempData["InfoMessage"] = "Datos modificados correctamente";
-                        return RedirectToAction("edit","room");
+                        return RedirectToAction("edit/" + room.roomID, "room");
                     case HttpStatusCode.NoContent:
                         TempData["InfoMessage"] = "Datos modificados correctamente";
-                        return RedirectToAction("edit","room");
+                        return RedirectToAction("edit/" + room.roomID, "room");
                     case HttpStatusCode.NotAcceptable:
                         TempData["InfoMessage"] = "Algunas butacas no pueden ser modificadas, porque están resevadas";
-                        return RedirectToAction("edit", "room");
+                        return RedirectToAction("edit/"+room.roomID, "room");
                     default:
                         return RedirectToAction("internalservererror", "error");
                 }
@@ -185,11 +185,6 @@ namespace CatchFilms.Controllers
                 try
                 {
                     client.BaseAddress = new Uri(LoginController.BaseUrl);
-                    if (Session["userAutentication"] != null)
-                    {
-                        client.DefaultRequestHeaders.Authorization = new
-                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
-                    }
                     if (Session["userAutentication"] != null)
                     {
                         client.DefaultRequestHeaders.Authorization = new
@@ -306,7 +301,7 @@ namespace CatchFilms.Controllers
             }
             else
             {
-                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+                if (Session["sessionData"] == null) { return RedirectToAction("Unauthorized", "error"); }
             }
             return null;
         }

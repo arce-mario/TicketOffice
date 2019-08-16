@@ -117,18 +117,8 @@ namespace ApiCatchFilms.Controllers
                 function.room = null;
             }
             //Se valida que el usuario no haya ingresado un valor existente en la base de datos
-            if (function.price != null && function.priceID == 0)
-            {
-                Price price = function.price;
-                Price prices = await db.Prices
-                    .Where(p => p.oldManPrice == price.oldManPrice && p.adultPrice == price.adultPrice && p.childPrice == price.childPrice)
-                    .FirstOrDefaultAsync();
-
-                function.price = null;
-                function.priceID = prices.priceID;
-            }
-            else if(function.priceID == -1)
-            {
+             if(function.priceID == -1)
+             {
                 Price price = await db.Prices.Where(p => p.valid != null).FirstOrDefaultAsync();
                 Debug.WriteLine("FunctionController :: PostFunction() :: default price: " + JsonConvert.SerializeObject(price));
                 if (price == null ) { return StatusCode(HttpStatusCode.NotAcceptable); }

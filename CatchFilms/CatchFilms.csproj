@@ -258,7 +258,6 @@
     <Content Include="Views\Room\Edit.cshtml" />
     <Content Include="Views\Seat\SeatsTickets.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\User\View.cshtml" />
     <Content Include="Views\Function\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
