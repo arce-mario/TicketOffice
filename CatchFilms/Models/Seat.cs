@@ -8,7 +8,9 @@ namespace CatchFilms.Models
     {
        
         public int seatID { get; set; }
+        [StringLength(20, ErrorMessage = "El valor debe ser entre 10 y 20.", MinimumLength =10)]
+        [Required(ErrorMessage = "Este campo es requerido.")]
         public int column { get; set; }
-        public char row { get; set; }
+        public string row { get; set; }
     }
 }

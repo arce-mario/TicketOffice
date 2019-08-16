@@ -190,6 +190,10 @@
     <Compile Include="Migrations\201908112334372_Alter-Price.Designer.cs">
       <DependentUpon>201908112334372_Alter-Price.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201908130319227_Alter-Seat.cs" />
+    <Compile Include="Migrations\201908130319227_Alter-Seat.Designer.cs">
+      <DependentUpon>201908130319227_Alter-Seat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApiCatchFilmsContext.cs" />
     <Compile Include="Models\Function.cs" />
@@ -249,6 +253,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201908112334372_Alter-Price.resx">
       <DependentUpon>201908112334372_Alter-Price.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908130319227_Alter-Seat.resx">
+      <DependentUpon>201908130319227_Alter-Seat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -8,19 +8,7 @@ namespace CatchFilms.Controllers
         {
             return View();
         }
-
-        public ActionResult Login()
-        {
-            Session["userAutentication"] = null;
-            Session["sessionData"] = null;
-            return View();
-        }
-
-        public ActionResult SignUp()
-        {
-            return View();
-        }
-
+        
         public ActionResult About()
         {
             return View();

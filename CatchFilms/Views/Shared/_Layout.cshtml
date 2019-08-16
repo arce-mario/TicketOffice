@@ -69,6 +69,7 @@
                                 <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Salas</a>
                                 <br />
                                 <div class="dropdown-menu">
+                                    @Html.ActionLink("Lista salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Informe de salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Registrar nueva sala", "create", new { controller = "room" }, new { @class = "dropdown-item" })
                                 </div>
@@ -84,7 +85,7 @@
                         }
                         @if (rol == 3)
                         {
-                            <li class="menu-item">@Html.ActionLink("Iniciar sesión", "login", new { controller = "home" }, new { @class = "links" })</li>
+                            <li class="menu-item">@Html.ActionLink("Iniciar sesión", "signin", new { controller = "login" }, new { @class = "links" })</li>
                         }
                         else
                         {

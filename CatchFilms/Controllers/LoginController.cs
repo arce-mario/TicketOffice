@@ -17,11 +17,30 @@ namespace CatchFilms.Controllers
     public class LoginController : Controller
     {
         public const string BaseUrl = "http://localhost:54642/";
+
+        public ActionResult SignIn()
+        {
+            Session["userAutentication"] = null;
+            Session["sessionData"] = null;
+            return View();
+        }
+
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ValidateUser(LoginUser loginUser)
+        public async Task<ActionResult> SignIn(LoginUser loginUser)
         {
             Debug.WriteLine(String.Concat("Nueva solicitud de inicio de sesión: ",loginUser.User));
+
+            TryValidateModel(loginUser);
+            if (!ModelState.IsValid)
+            {
+                return View(loginUser);
+            }
+
             using (var client = new HttpClient())
             {
                 try
@@ -72,6 +91,13 @@ namespace CatchFilms.Controllers
             user.userID = null;
             user.hireDare = null;
             Debug.WriteLine("usuario"+ JsonConvert.SerializeObject(user));
+
+            TryValidateModel(user);
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
             using (var client = new HttpClient())
             {
                 try

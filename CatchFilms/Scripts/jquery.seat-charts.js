@@ -432,14 +432,13 @@
 			var $container = (legend.node || $('<div></div').insertAfter(fn))
 				.addClass('seatCharts-legend');
 				
-			var $ul = $('<ul></ul>')
+			var $ul = $('<div class="col-md-12" style="></div>')
 				.addClass('seatCharts-legendList')
 				.appendTo($container);
 			
 			$.each(legend.items, function(index, item) {
 				$ul.append(
-					$('<li></li>')
-						.addClass('seatCharts-legendItem')
+					$('<div class="pull-left" style="margin-right: 5px;"></div>')
 						.append(
 							$('<div></div>')
 								//merge user defined classes with our standard ones

@@ -36,7 +36,7 @@ namespace ApiCatchFilms.Migrations
 
             context.Seats.AddOrUpdate(s => s.seatID, new Seat() {
                 column = 1,
-                row = 'A'
+                row = "A"
             });
             context.SaveChanges();
 

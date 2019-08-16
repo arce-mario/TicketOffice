@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CatchFilms.Models.Room>
+@{
+    ViewBag.Title = "Lista de salas";
+}
+<div class="container">
+    <div class="page">
+        <div class="breadcrumbs">
+            @Html.ActionLink("Inicio", "index", new { controller = "home" })
+            <span>@ViewBag.Title</span>
+        </div>
+
+        <div class="row">
+            @if (ViewBag.ErrorMessage  != null && ViewBag.ErrorMessage != "")
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Alerta!</strong> @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            }
+            @if (ViewBag.InfoMessage != null && ViewBag.InfoMessage != "")
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-primary" role="alert">
+                        <strong>Finalizado!</strong> @ViewBag.InfoMessage
+                    </div>
+                </div>
+            }
+            <div class="col-md-12">
+                @foreach (var item in Model)
+                {
+                    <div class="card" style="margin-bottom: 5px;">
+                        <div class="card-body">
+                            <h4 class="card-title"><strong>Nombre de la sala: </strong>Sala @item.number</h4>
+                            <h4 class="card-subtitle mb-2 text-muted">Descripcion:</h4>
+                            <p class="card-text">@item.description</p>
+                            <a href="@Url.Action("getroom","room", new { @id = item.roomID})" class="card-link">Detalles de la sala</a>
+                            <a href="@Url.Action("delete","room", new { @id = item.roomID})" class="card-link text-danger link_delete" onclick="show_alert()">Eliminar sala</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.link_delete').click(function (evt) {
+            return confirm("¿Seguro que desea eliminar el registro?");
+        });
+    });
+</script>
