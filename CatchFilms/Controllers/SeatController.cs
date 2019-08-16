@@ -23,6 +23,8 @@ namespace CatchFilms.Controllers
 
         public ActionResult seatsTickets()
         {
+            validationAuntentication(2);
+
             Info info = new Info();
             String data = (TempData["queryData"] == null) ? "" : TempData["queryData"].ToString();
             int id = (TempData["roomID"] == null) ? 0 : int.Parse(TempData["roomID"].ToString());
@@ -156,6 +158,27 @@ namespace CatchFilms.Controllers
                 if (roomRow != "") { seatArray.Add(roomRow); }
             }
             return new Room() { seatArray = JsonConvert.SerializeObject(seatArray), notAvailable = JsonConvert.SerializeObject(notAvailable), rows = rows, columns = columns };
+        }
+
+        private ActionResult validationAuntentication(int opc)
+        {
+            if (opc == 1)
+            {
+                SessionData user = (SessionData)Session["sessionData"];
+                if (user != null)
+                {
+                    if (user.rolID != 1) { return RedirectToAction("Unauthorized", "error"); }
+                }
+                else
+                {
+                    return RedirectToAction("Unauthorized", "error");
+                }
+            }
+            else
+            {
+                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+            }
+            return null;
         }
     }
 }

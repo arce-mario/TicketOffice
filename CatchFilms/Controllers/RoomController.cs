@@ -17,6 +17,8 @@ namespace CatchFilms.Controllers
     {
         public async Task<string> getRooms(string name = "")
         {
+            validationAuntentication(1);
+
             using (var client = new HttpClient())
             {
                 if (name != "")
@@ -37,6 +39,8 @@ namespace CatchFilms.Controllers
 
         public async Task<ActionResult> Index()
         {
+            validationAuntentication(1);
+
             List<Room>rooms = new List<Room>();
             using (var client = new HttpClient())
             {
@@ -59,6 +63,8 @@ namespace CatchFilms.Controllers
 
         public ActionResult Edit(int id)
         {
+            validationAuntentication(1);
+
             Room room = null;
             using (var client = new HttpClient())
             {
@@ -94,6 +100,8 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Edit(Room room)
         {
+            validationAuntentication(1);
+
             TryValidateModel(room);
             if (!ModelState.IsValid)
             {
@@ -140,6 +148,8 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Create(Room room)
         {
+            validationAuntentication(1);
+
             string seatList = room.seatArray;
             room.seatArray = null;
 
@@ -190,6 +200,8 @@ namespace CatchFilms.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
+            validationAuntentication(1);
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
@@ -247,6 +259,27 @@ namespace CatchFilms.Controllers
                 if (roomRow != "") { seatArray.Add(roomRow); }
             }
             return new Room() { seatArray = JsonConvert.SerializeObject(seatArray), notAvailable = JsonConvert.SerializeObject(notAvailable), rows = rows, columns = columns};
+        }
+
+        private ActionResult validationAuntentication(int opc)
+        {
+            if (opc == 1)
+            {
+                SessionData user = (SessionData)Session["sessionData"];
+                if (user != null)
+                {
+                    if (user.rolID != 1) { return RedirectToAction("Unauthorized", "error"); }
+                }
+                else
+                {
+                    return RedirectToAction("Unauthorized", "error");
+                }
+            }
+            else
+            {
+                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+            }
+            return null;
         }
     }
 }

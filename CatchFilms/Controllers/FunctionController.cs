@@ -1,12 +1,10 @@
 ﻿using CatchFilms.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
@@ -16,10 +14,18 @@ namespace CatchFilms.Controllers
         [HttpGet]
         public ActionResult Details(int id)
         {
+            validationAuntentication(2);
+
             Function function = null;
             using (var client = new HttpClient())
             {
+                if (Session["sessionData"] == null) { return RedirectToAction("Unauthorized", "error"); }
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync($"api/functions/{id}");
                 var result = responseTask.Result;
 
@@ -52,6 +58,9 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Create(Function function)
         {
+
+            validationAuntentication(1);
+
             if (function.movie != null)
                 function.movie.type = "Default";
             TryValidateModel(function);
@@ -107,27 +116,10 @@ namespace CatchFilms.Controllers
             }
         }
         
-
-        [HttpPost]
-        public ActionResult ProfileUser(User Users)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(LoginController.BaseUrl);
-                var putTask = client.PutAsJsonAsync($"api/apiCatchFilms/{Users.userID}", Users);
-                putTask.Wait();
-
-                var result = putTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("Index");
-                }
-            }
-            return View(Users);
-        }
-
         public ActionResult Edit(int id)
         {
+            validationAuntentication(1);
+
             Function function = null;
             using (var client = new HttpClient())
             {
@@ -152,6 +144,7 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Edit(Function function)
         {
+            validationAuntentication(1);
             using (var client = new HttpClient())
             {
                 Debug.WriteLine("Registro: " + JsonConvert.SerializeObject(function));
@@ -169,5 +162,25 @@ namespace CatchFilms.Controllers
             return View(function);
         }
 
+        private ActionResult validationAuntentication(int opc)
+        {
+            if (opc == 1)
+            {
+                SessionData user = (SessionData)Session["sessionData"];
+                if (user != null)
+                {
+                    if (user.rolID != 1) { return RedirectToAction("Unauthorized", "error"); }
+                }
+                else
+                {
+                    return RedirectToAction("Unauthorized", "error");
+                }
+            }
+            else
+            {
+                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+            }
+            return null;
+        }
     }
 }

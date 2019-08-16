@@ -19,6 +19,8 @@ namespace CatchFilms.Controllers
 
         public async Task<ActionResult> Index()
         {
+            validationAuntentication(1);
+
             List<Movie> Movies = new List<Movie>();
             using (var client = new HttpClient())
             {
@@ -96,6 +98,8 @@ namespace CatchFilms.Controllers
 
         public ActionResult Create()
         {
+            validationAuntentication(1);
+
             ViewBag.InfoMessage = TempData["InfoMessage"];
             return View();
         }
@@ -103,6 +107,8 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Create(Movie movie)
         {
+            validationAuntentication(1);
+
             movie.movieID = null;
             movie.type = "default";
             Debug.WriteLine(JsonConvert.SerializeObject(movie));
@@ -138,6 +144,8 @@ namespace CatchFilms.Controllers
         }
          public async Task<string> getMovies(string movie)
         {
+            validationAuntentication(1);
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
@@ -177,6 +185,8 @@ namespace CatchFilms.Controllers
 
         public ActionResult Edit(int id )
         {
+            validationAuntentication(1);
+
             Movie movie = null;
             using (var client = new HttpClient())
             {
@@ -212,6 +222,8 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Edit(Movie movie)
         {
+            validationAuntentication(1);
+
             movie.type = "default";
             TryValidateModel(movie);
             if (!ModelState.IsValid)
@@ -239,6 +251,8 @@ namespace CatchFilms.Controllers
         [HttpGet]
         public ActionResult Delete(int id)
         {
+            validationAuntentication(1);
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
@@ -261,7 +275,7 @@ namespace CatchFilms.Controllers
                 }
                 else if (result.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    TempData["ErrorMessage"] = "Error el registro no puede ser eliminado, <strong>porque este recurso no existe</strong>";
+                    TempData["ErrorMessage"] = "Error el registro no puede ser eliminado, porque este recurso no existe";
                     return RedirectToAction("index", "movie");
                 }
                 TempData["ErrorMessage"] = "Error interno del sistema, no se tuvo acceso al recurso solicitado";
@@ -269,5 +283,25 @@ namespace CatchFilms.Controllers
             }
         }
 
+        private ActionResult validationAuntentication(int opc)
+        {
+            if (opc == 1)
+            {
+                SessionData user = (SessionData)Session["sessionData"];
+                if (user != null)
+                {
+                    if (user.rolID != 1) { return RedirectToAction("Unauthorized", "error"); }
+                }
+                else
+                {
+                    return RedirectToAction("Unauthorized", "error");
+                }
+            }
+            else
+            {
+                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+            }
+            return null;
+        }
     }
 }

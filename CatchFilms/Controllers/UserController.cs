@@ -1,11 +1,8 @@
 ﻿using CatchFilms.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
@@ -14,6 +11,14 @@ namespace CatchFilms.Controllers
     {
         public ActionResult Edit(int id)
         {
+            validationAuntentication(2);
+            SessionData login = (SessionData)Session["sessionData"];
+
+            if (login.userID != id)
+            {
+                return RedirectToAction("Unauthorized", "error");
+            }
+
             User user = null;
             using (var client = new HttpClient())
             {
@@ -38,8 +43,15 @@ namespace CatchFilms.Controllers
         [HttpPost]
         public ActionResult Edit(User user)
         {
+            validationAuntentication(2);
+            SessionData login = (SessionData)Session["sessionData"];
+
+            if (login.userID != user.userID)
+            {
+                return RedirectToAction("Unauthorized", "error");
+            }
+
             user.birthDate = Convert.ToDateTime(user.birthDate.ToString("dd-MM-yyyy"));
-            //movie.type = "default";
             using (var client = new HttpClient())
             {
                 Debug.WriteLine("Registro: " + JsonConvert.SerializeObject(user));
@@ -55,6 +67,46 @@ namespace CatchFilms.Controllers
                 Debug.WriteLine("Codigo de error: " + result.StatusCode);
             }
             return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult ProfileUser(User Users)
+        {
+            validationAuntentication(2);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var putTask = client.PutAsJsonAsync($"api/apiCatchFilms/{Users.userID}", Users);
+                putTask.Wait();
+
+                var result = putTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(Users);
+        }
+        private ActionResult validationAuntentication(int opc)
+        {
+            if (opc == 1)
+            {
+                SessionData user = (SessionData)Session["sessionData"];
+                if (user != null)
+                {
+                    if (user.rolID != 1) { return RedirectToAction("Unauthorized", "error"); }
+                }
+                else
+                {
+                    return RedirectToAction("Unauthorized", "error");
+                }
+            }
+            else
+            {
+                if (Session["sessionData"] != null) { return RedirectToAction("Unauthorized", "error"); }
+            }
+            return null;
         }
     }
 }
