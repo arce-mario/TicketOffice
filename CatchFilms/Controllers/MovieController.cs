@@ -213,6 +213,12 @@ namespace CatchFilms.Controllers
         public ActionResult Edit(Movie movie)
         {
             movie.type = "default";
+            TryValidateModel(movie);
+            if (!ModelState.IsValid)
+            {
+                return View(movie);
+            }
+
             using (var client = new HttpClient())
             {
                 Debug.WriteLine("Registro: "+JsonConvert.SerializeObject(movie));

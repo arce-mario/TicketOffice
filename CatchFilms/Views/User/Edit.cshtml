@@ -1,0 +1,68 @@
+﻿@model CatchFilms.Models.User
+@{
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+    ViewBag.Title = "Registrarse";
+}
+
+<div class="container" style="max-width: 60%; min-width: 380px;">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.userID, new { htmlAttributes = new { @class = "form-control" } })
+        <h2 class="text-center">Registrar cuenta de usuario</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control", placeholder = "Primer Nombre" } })
+                    @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Primer Apellido" } })
+                    @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Fecha de nacimiento</label>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.birthDate, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                    @Html.ValidationMessageFor(model => model.birthDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Correo electrónico" } })
+                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.userName, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre de usuario" } })
+                    @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.pass, new { htmlAttributes = new { @class = "form-control", placeholder = "Contraseña" } })
+                    @Html.ValidationMessageFor(model => model.pass, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-warning btn-block" style="color: #FFF;">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
