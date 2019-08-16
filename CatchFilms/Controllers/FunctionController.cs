@@ -13,77 +13,61 @@ namespace CatchFilms.Controllers
 {
     public class FunctionController : Controller
     {
-        // GET: Function
-        public async Task<List<Function>> List(HttpStatusCode statusCode, int movieID)
+        [HttpGet]
+        public ActionResult Details(int id)
         {
-            List<Function> functions = new List<Function>();
+            Function function = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-                client.DefaultRequestHeaders.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpResponseMessage res = await client.GetAsync(String.Concat("api/functions/movie/", movieID));
+                var responseTask = client.GetAsync($"api/functions/{id}");
+                var result = responseTask.Result;
 
-                if (res.IsSuccessStatusCode)
+                switch (result.StatusCode)
                 {
-                    var response = res.Content.ReadAsStringAsync().Result;
-                    Debug.WriteLine(response);
-                    functions = JsonConvert.DeserializeObject<List<Function>>(response);
-                }
-                statusCode = res.StatusCode;
-                Debug.WriteLine("Codigo de respuesta: " + res.StatusCode);
-                return functions;
-            }
-        }
-
-        public ActionResult Details(int? id)
-        {
-            Function function = null;
-
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            else
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri(LoginController.BaseUrl);
-                    var responseTask = client.GetAsync(String.Concat("api/functions/", id));
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
+                    case HttpStatusCode.OK:
+                        ViewBag.InfoMessage = TempData["InfoMessage"];
                         var readTask = result.Content.ReadAsAsync<Function>();
                         readTask.Wait();
                         function = readTask.Result;
-                    }
+                        Session["function"] = function;
+                        break;
+                    case HttpStatusCode.NotFound:
+                        return HttpNotFound();
+                    default:
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+                Debug.WriteLine("Codigo: " + result.StatusCode);
             }
-
-            if (function == null) { return new HttpStatusCodeResult(HttpStatusCode.NotFound); }
             return View(function);
         }
-
+        
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.InfoMessage = TempData["InfoMessage"];
             return View();
         }
         
         [HttpPost]
         public ActionResult Create(Function function)
         {
-            function.functionID = null;
+            if (function.movie != null)
+                function.movie.type = "Default";
+            TryValidateModel(function);
 
-            function.price.priceID = (function.price.priceID == 0) ? null : function.price.priceID;
-            function.room.roomID = (function.room.roomID == 0) ? null : function.room.roomID;
+            if ((function.movieID == null && function.movie == null) || function.roomID == null || (function.priceID == null && function.price == null))
+            {
+                ModelState.AddModelError(String.Empty, "Debe definir o selecionar los campos de Película, Precio y Sala");
+                return View(function);
+            }
 
-            function.priceID = (function.priceID == 0) ? null : function.priceID;
-            function.movieID = (function.movieID == 0) ? null : function.movieID;
-            function.roomID = (function.roomID == 0) ? null : function.roomID;
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(String.Empty, "Se encontraron uno o más errores en los campos.");
+                return View(function);
+            }
 
-            function.movie.type = "Default";
-            Debug.WriteLine(String.Concat("FunctionController :: Create() :: function: ",JsonConvert.SerializeObject(function)));
             using (var client = new HttpClient())
             {
                 try
@@ -99,21 +83,20 @@ namespace CatchFilms.Controllers
 
                     postTask.Wait();
                     var res = postTask.Result;
-
-                    if (res.IsSuccessStatusCode)
-                    {
-                        ViewBag.message = "Registro creado de forma correcta";
-                        return View();
-                    }
-                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        return RedirectToAction("unauthorized", "error");
-                    }else if (res.StatusCode == HttpStatusCode.NotAcceptable)
-                    {
-                        ModelState.AddModelError(String.Empty, "No se encontraron registro de precios por defectos");
-                    }
-
                     Debug.WriteLine("ERROR: " + res.StatusCode);
+                    switch (res.StatusCode)
+                    {
+                        case HttpStatusCode.Created:
+                            TempData["InfoMessage"] = String.Concat("Función \"",function.description,"\" registrada exitosamente en el sistema");
+                            return RedirectToAction("create","function");
+                        case HttpStatusCode.Unauthorized:
+                            return RedirectToAction("unauthorized", "error");
+                        case HttpStatusCode.NotAcceptable:
+                            ModelState.AddModelError(String.Empty, "No se encontraron registro de precios por defectos");
+                            break;
+                        default:
+                            return RedirectToAction("internalservererror","error");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -124,29 +107,7 @@ namespace CatchFilms.Controllers
                 return View();
             }
         }
-
-        public ActionResult ProfileUser(int id)
-        {
-            User user = new User();
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(LoginController.BaseUrl);
-                var responseTask = client.GetAsync(String.Concat("api/users/", id));
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<User>();
-                    readTask.Wait();
-                    user = readTask.Result;
-
-                }
-                Debug.WriteLine(result.StatusCode + "holis");
-            }
-            
-            return View(user);
-        }
+        
 
         [HttpPost]
         public ActionResult ProfileUser(User Users)

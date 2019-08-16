@@ -2,9 +2,8 @@
 @Styles.Render("~/Content/css/style-seats.css")
 @Scripts.Render("~/Scripts/jquery.seat-charts.js")
 @{
-    ViewBag.Title = "Registrar sala";
+    ViewBag.Title = $"Editar información de la \"Sala {Model.number}\"";
 }
-
 <div class="container">
     <div class="breadcrumbs">
         @Html.ActionLink("Inicio", "index", new { controller = "home" })
@@ -14,19 +13,31 @@
     <div class="row">
         <div class="col-md-12"><div class="section-title">@ViewBag.Title</div><br /></div>
     </div>
-    @using (Html.BeginForm())
+
+    @using (@Html.BeginForm("edit", "room", FormMethod.Post, new { id = "frmId"}))
     {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.roomID, new { htmlAttributes = new { @class = "form-control" } })
         @Html.HiddenFor(model => model.seatArray, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.notAvailable, new { htmlAttributes = new { @class = "form-control" } })
         <div class="row">
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="col-md-12">@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })<br /></div>
             }
-            @if (ViewBag.OkMessage != null && ViewBag.OkMessage != "")
+            @if (ViewBag.InfoMessage != null && ViewBag.InfoMessage != "")
             {
                 <div class="col-md-12">
                     <div class="alert alert-success">
-                        <strong>Finalizado! </strong>@ViewBag.OkMessage
+                        <strong>Finalizado! </strong>@ViewBag.InfoMessage
+                    </div>
+                </div>
+            }
+            @if (ViewBag.ErrorMessage != null && ViewBag.ErrorMessage != "")
+            {
+                <div class="col-md-12">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Alerta!</strong> @ViewBag.ErrorMessage
                     </div>
                 </div>
             }
@@ -50,36 +61,27 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <label class="control-label">Filas</label>
-                        <div class="form-group">
-                            @Html.EditorFor(model => model.rows, new { htmlAttributes = new { @class = "form-control", @Value = "6" } })
-                            @Html.ValidationMessageFor(model => model.rows, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="control-label">Columnas</label>
-                        <div class="form-group">
-                            @Html.EditorFor(model => model.columns, new { htmlAttributes = new { @class = "form-control", @Value = "12" } })
-                            @Html.ValidationMessageFor(model => model.columns, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-md-4">
+                    @Html.HiddenFor(model => model.columns, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.HiddenFor(model => model.rows, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-12">
                         <label class="control-label">Total de butacas</label>
                         <div class="form-group">
                             <input type="number" id="seats" class="form-control" disabled />
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-default" onclick="define_seats()">Generar butacas</button>
+                    <div class="col-md-4">
+                        <strong class="feature-subtitle">Leyenda</strong>
+                        <div id="legend"></div>
+                    </div>
+                    <div class="col-md-8">
+                        <strong class="feature-subtitle">Registros a modificar</strong>
+                        <ul id="selected-seats" class="scrollbar scrollbar1"></ul>
                     </div>
                 </div>
                 <br />
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit">Crear nueva sala</button>
+                        <button type="button" onclick="send_changes()">Editar datos sala</button>
                         <a href="@Url.Action("index","room")" class="btn btn-success">volver a la lista de salas</a>
                     </div>
                 </div>
@@ -96,51 +98,24 @@
     }
 </div>
 <script type="text/javascript">
+    var cont = 1; var price = 0; var sc; var unavailables = JSON.parse($("#notAvailable").val());
+    var $cart = $('#selected-seats'), //Sitting Area
+        $counter = $('#counter'),
+        $total = $('#total'); //Votes
     $(document).ready(function () {
-        $("#rows").keyup(function () {
-            if ($("#columns").val() != "") {
-                $("#seats").val(parseInt($("#rows").val()) * parseInt($("#columns").val()))
-            }
-        });
-
-        $("#columns").keyup(function () {
-            if ($("#rows").val() != "") {
-                $("#seats").val(parseInt($("#rows").val()) * parseInt($("#columns").val()))
-            }
-        });
-        define_seats();
+        define_room(JSON.parse($('#seatArray').val()));
         $("#seats").val(parseInt($("#rows").val()) * parseInt($("#columns").val()));
+        max = $('#seats').val();
     });
 
-    function define_seats() {
-        var array = [];
-        if ($("#rows").val() != "" && $("#columns").val() != "") {
-            if (parseInt($("#rows").val()) >= 3 && parseInt($("#rows").val()) <= 10 && parseInt($("#columns").val()) >= 6 && parseInt($("#columns").val()) <= 20) {
-                for (let i = 0; i < parseInt($("#rows").val()); i++){
-                    var row = "";
-
-                    for (let c = 0; c < parseInt($("#columns").val()); c++){
-                        row += "a";
-                    }
-                    array.push(row);
-                }
-
-                $('.seatCharts-row').remove();
-                $('.seatCharts-legendItem').remove();
-                $('#seat-map,#seat-map *').unbind().removeData();
-
-                define_room(array);
-            } else {
-                alert("Los valores máximos permitidos son 10 filas y 20 columnas, minimos 3 filas, 6 columnas");
-            }
-        }
-        console.log(array);
+    function send_changes() {
+        defineListSeats();
+        $('#frmId').submit();
     }
-    
+
     function define_room(array) {
         $('#seat-map').show();
-        $('#seatArray').val(JSON.stringify(array));
-        var sc = $('#seat-map').seatCharts({
+        sc = $('#seat-map').seatCharts({
             map: array,
             naming: {
                 top: false,
@@ -152,21 +127,64 @@
                 node: $('#legend'),
                 items: [
                     ['a', 'available', 'Disponible'],
-                    ['a', 'unavailable', 'Reservado'],
+                    ['a', 'unavailable', 'No disponible'],
                     ['a', 'selected', 'Selecionado']
                 ]
             },
             click: function () { //Click event
                 if (this.status() == 'available' && cont <= max) { //optional seat
+                    cont++;
+                    $counter.text(sc.find('selected').length + 1);
+                    showConfig(this, 1);
                     return 'selected';
                 } else if (this.status() == 'selected') { //Checked
-                    return 'available';
+                    var id = this.settings.id;
+                    var result = 'available';
+                    if (cont > 1) {
+                        cont--;
+                    }
+                    $counter.text(sc.find('selected').length - 1);
+                    unavailables.forEach(function (element) {
+                        if (id == element) {
+                            result = 'unavailable';
+                            var index = unavailables.indexOf(element);
+                            unavailables.splice(index, 1);
+                        }
+                    });
+                    showConfig(this, 2);
+                    return result;
                 } else if (this.status() == 'unavailable') { //sold
-                    return 'unavailable';
+                    cont++;
+                    $counter.text(sc.find('selected').length + 1);
+                    unavailables.push(this.settings.id);
+                    showConfig(this, 1);
+                    return 'selected';
                 } else {
                     return this.style();
                 }
             }
         });
+        sc.get(unavailables).status('unavailable');
+    }
+
+    function defineListSeats() {
+        var notAvailable = $("#notAvailable");
+        var array = [];
+        sc.find('selected').each(function () {
+            array.push(this.settings.id);
+        });
+        notAvailable.val(JSON.stringify(array));
+        console.log(notAvailable.val());
+    }
+
+    function showConfig(reg, opc) {
+        if (opc == 1){
+            $('<li>Butaca: ' + reg.settings.id.split("_")[0] + reg.settings.id.split("_")[1] + '</li>')
+                .attr('id', 'cart-item-' + reg.settings.id)
+                .data('seatId', reg.settings.id)
+                .appendTo($cart);
+        } else {
+            $('#cart-item-' + reg.settings.id).remove();
+        }
     }
 </script>

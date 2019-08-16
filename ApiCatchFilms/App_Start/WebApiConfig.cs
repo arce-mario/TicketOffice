@@ -18,6 +18,8 @@ namespace ApiCatchFilms
             config.Formatters.Remove(config.Formatters.XmlFormatter);
             config.Formatters.JsonFormatter.SerializerSettings =
                  new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling
+                = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             // Rutas de API web
             config.MapHttpAttributeRoutes();
 

@@ -67,7 +67,8 @@ namespace CatchFilms.Controllers
                             firstName = session["firstName"].ToString(),
                             lastName = session["lastName"].ToString(),
                             nameID = session["nameid"].ToString(),
-                            email = session["email"].ToString()
+                            email = session["email"].ToString(),
+                            userID = int.Parse(session["userID"].ToString())
                         };
 
                         return RedirectToAction("index","home");
@@ -81,6 +82,36 @@ namespace CatchFilms.Controllers
                 ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear el nuevo registro");
                 return RedirectToAction("login", "home"); ;
             }
+        }
+
+        public ActionResult ProfileUser()
+        {
+            SessionData sessionData = (SessionData)Session["sessionData"];
+
+            if (sessionData == null)
+            {
+                return RedirectToAction("signin", "login");
+            }
+
+            User user = new User();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var responseTask = client.GetAsync(String.Concat("api/users/", sessionData.userID));
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<User>();
+                    readTask.Wait();
+                    user = readTask.Result;
+
+                }
+                Debug.WriteLine(result.StatusCode + "holis");
+            }
+
+            return View(user);
         }
 
         [HttpPost]

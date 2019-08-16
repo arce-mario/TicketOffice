@@ -49,29 +49,38 @@
                 <div class="main-navigation">
                     <button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
                     <ul class="menu">
-                        <li class="menu-item current-menu-item">
-                            @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "links" })
+                        <li class="menu-item">
+                            @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "dropdown-item" })
                         </li>
                         @if (rol == 1)
                         {
-                             <li class="menu-item dropdown">
+                            <li class="menu-item dropdown">
+                                <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Página principal</a>
+                                <br />
+                                <div class="dropdown-menu">
+                                    @Html.ActionLink("Inicio", "index", new { controller = "home" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Cartelera", "billboard", new { controller = "movie" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Próximamente", "billboard", new { controller = "movie" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Acerca de", "about", new { controller = "home" }, new { @class = "dropdown-item"   })
+                                </div>
+                            </li>
+                            <li class="menu-item dropdown">
                                 <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Servicios</a>
                                 <br />
                                 <div class="dropdown-menu">
                                     @Html.ActionLink("Registrar película", "create", new { controller = "movie" }, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Ver registros", "billboard", new { controller = "movie" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Ver registros", "index", new { controller = "movie" }, new { @class = "dropdown-item" })
                                     <div class="dropdown-divider"></div>
                                     @Html.ActionLink("Registrar función", "create", new { controller = "function" }, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Ver registros", "index", new { controller = "function" }, new { @class = "dropdown-item" })
                                 </div>
-                             </li>
+                            </li>
                             <li class="menu-item dropdown">
                                 <a href="#" class="links dropdown-toggle" data-toggle="dropdown">Salas</a>
                                 <br />
                                 <div class="dropdown-menu">
-                                    @Html.ActionLink("Lista salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Informe de salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Informes de salas", "index", new { controller = "room" }, new { @class = "dropdown-item" })
                                     @Html.ActionLink("Registrar nueva sala", "create", new { controller = "room" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Modificar sala", "edit", new { controller = "room" }, new { @class = "dropdown-item" })
                                 </div>
                             </li>
                         }
@@ -80,8 +89,8 @@
                             <li class="menu-item">
                                 @Html.ActionLink("Cartelera", "billboard", new { controller = "movie" }, new { @class = "links" })
                             </li>
-                            <li class="menu-item"><a class="links" href="#">Próximamente</a></li>
-                            <li class="menu-item"><a class="links" href="#">Acerca de</a></li>
+                            <li class="menu-item">@Html.ActionLink("Próximamente", "billboard", new { controller = "movie" }, new { @class = "links" })</li>
+                            <li class="menu-item">@Html.ActionLink("Acerca de", "about", new { controller = "home" }, new { @class = "links" })</li>
                         }
                         @if (rol == 3)
                         {
@@ -102,12 +111,12 @@
                                     </div>
                                     <div class="dropdown-divider"></div>
                                     @Html.ActionLink("Mi perfil", "profile", new { controller = "home" }, new { @class= "dropdown-item" })
-                                    @Html.ActionLink("Cerrar sesión", "login", new { controller = "home" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Cerrar sesión", "signin", new { controller = "login" }, new { @class = "dropdown-item" })
                                 </div>
                             </li>
                         }
                     </ul> <!-- .menu -->
-                    <form class="search-form" method="get">
+                    <form class="search-form" method="get" action="/movie/searchmovies">
                         <input id="search_movie" name="name" type="text" placeholder="Buscar...">
                         <button type="button"><i class="fa fa-search"></i></button>
                     </form>

@@ -57,15 +57,99 @@ namespace CatchFilms.Controllers
             }
         }
 
+        public ActionResult Edit(int id)
+        {
+            Room room = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var responseTask = client.GetAsync($"api/rooms/{id}");
+                var result = responseTask.Result;
+
+                switch (result.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        ViewBag.InfoMessage = TempData["InfoMessage"];
+                        var readTask = result.Content.ReadAsAsync<Room>();
+                        readTask.Wait();
+                        room = readTask.Result;
+                        Room tempRoom = defineSeatArray(room.roomSeats);
+                        room.seatArray = tempRoom.seatArray;
+                        room.rows = tempRoom.rows;
+                        room.columns = tempRoom.columns;
+                        room.notAvailable = tempRoom.notAvailable;
+                        //Luego de haber generado el atributo room.seatArray la lista de RoomSeats ya no es necesaría
+                        room.roomSeats = null;
+                        break;
+                    case HttpStatusCode.NotFound:
+                        return HttpNotFound();
+                    default:
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Debug.WriteLine("Codigo: " + result.StatusCode);
+            }
+            return View(room);
+        }
+        
+        [HttpPost]
+        public ActionResult Edit(Room room)
+        {
+            TryValidateModel(room);
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(String.Empty, "Se encontraron uno o más errores en los campos. Sujerencia recargue la página.");
+                return View(room);
+            }
+
+            var uri = $"api/rooms/{room.roomID}?notAvailable={room.notAvailable}";
+            room.rows = null;
+            room.columns = null;
+            room.roomSeats = null;
+            room.notAvailable = null;
+            room.seatArray = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(LoginController.BaseUrl);
+                var putTask = client.PutAsJsonAsync(uri, room);
+                putTask.Wait();
+                var result = putTask.Result;
+
+                switch (result.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        TempData["InfoMessage"] = "Datos modificados correctamente";
+                        return RedirectToAction("edit","room");
+                    case HttpStatusCode.NoContent:
+                        TempData["InfoMessage"] = "Datos modificados correctamente";
+                        return RedirectToAction("edit","room");
+                    case HttpStatusCode.NotAcceptable:
+                        TempData["InfoMessage"] = "Algunas butacas no pueden ser modificadas, porque están resevadas";
+                        return RedirectToAction("edit", "room");
+                    default:
+                        return RedirectToAction("internalservererror", "error");
+                }
+            }
+        }
         public ActionResult Create()
         {
-            ViewBag.OkMessage = (TempData["shortMessage"] == null)? "" : TempData["shortMessage"].ToString();
+            ViewBag.OkMessage = (TempData["shortMessage"] == null) ? "" : TempData["shortMessage"].ToString();
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(Room room, string seatsList = "")
+        public ActionResult Create(Room room)
         {
+            string seatList = room.seatArray;
+            room.seatArray = null;
+
+            TryValidateModel(room);
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(String.Empty, "Se encontraron uno o más errores en los campos");
+                return View(room);
+            }
+
             using (var client = new HttpClient())
             {
                 try
@@ -77,7 +161,7 @@ namespace CatchFilms.Controllers
                         client.DefaultRequestHeaders.Authorization = new
                             AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
                     }
-                    var postTask = client.PostAsJsonAsync<Room>(String.Concat("api/rooms?listSeats=",seatsList), room);
+                    var postTask = client.PostAsJsonAsync<Room>(String.Concat("api/rooms?listSeats=", seatList), room);
 
                     postTask.Wait();
                     var res = postTask.Result;
@@ -85,7 +169,7 @@ namespace CatchFilms.Controllers
                     if (res.StatusCode == HttpStatusCode.Created)
                     {
                         TempData["shortMessage"] = String.Concat("Registro: Sala ", room.number, " creado con éxito."); ;
-                        return RedirectToAction("create","room");
+                        return RedirectToAction("create", "room");
                     }
                     else if (res.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -100,10 +184,9 @@ namespace CatchFilms.Controllers
                 }
 
                 ModelState.AddModelError(String.Empty, "Ocurrió un error al tratar de crear el nuevo registro");
-                return RedirectToAction("create", "room"); ;
+                return RedirectToAction("create", "room");
             }
         }
-
         [HttpGet]
         public ActionResult Delete(int id)
         {
@@ -132,6 +215,38 @@ namespace CatchFilms.Controllers
                 return RedirectToAction("index","room");
             }
         }
+        private Room defineSeatArray(List<RoomSeat> roomSeats)
+        {
+            List<string> seatArray = new List<string>();
+            int defaultASCII = 65; int rows = 0; int columns = 0;
+            List<string> notAvailable = new List<string>();
+            if (roomSeats.Count() == 0)
+            {
+                return new Room() { seatArray = JsonConvert.SerializeObject(seatArray), rows = rows, columns = columns };
+            }
+            columns = roomSeats.Where(f => f.seat.row == "A").Count();
+            rows = roomSeats.Where(f => f.seat.column == 1).Count();
+            for (int i = 0; i < rows; i++)
+            {
+                string roomRow = "";
+                for (int c = 0; c < columns; c++)
+                {
+                    RoomSeat roomSeat = roomSeats
+                        .Where(r => ((int)r.seat.row.ToCharArray()[0] == (defaultASCII + i)) && r.seat.column == (c+1)).FirstOrDefault();
+                    Debug.WriteLine("Asiento: " + JsonConvert.SerializeObject(roomSeats));
 
+                    if (roomSeat != null)
+                    {
+                        roomRow += "a";
+                        if (roomSeat.status != 1)
+                        {
+                            notAvailable.Add(String.Concat(roomSeat.seat.row, "_", roomSeat.seat.column));
+                        }
+                    }
+                }
+                if (roomRow != "") { seatArray.Add(roomRow); }
+            }
+            return new Room() { seatArray = JsonConvert.SerializeObject(seatArray), notAvailable = JsonConvert.SerializeObject(notAvailable), rows = rows, columns = columns};
+        }
     }
 }

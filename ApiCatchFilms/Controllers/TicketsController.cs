@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiCatchFilms.Models;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System;
+using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
@@ -68,25 +72,64 @@ namespace ApiCatchFilms.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        // POST: api/Tickets
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
-        [ResponseType(typeof(Ticket))]
-        public async Task<IHttpActionResult> PostTicket(Ticket ticket)
+        
+        public IHttpActionResult PostTicket(Ticket ticket, string notAvailable = "")
         {
-            if (!ModelState.IsValid)
+            List<Ticket> tickets = new List<Ticket>();
+            List<string> seats = JsonConvert.DeserializeObject<List<string>>(notAvailable);
+            List<RoomSeat> roomSeats = new List<RoomSeat>();
+
+            foreach (string identity in seats)
             {
-                return BadRequest(ModelState);
+                string[] seatData = identity.Split('_');
+                int cdata = int.Parse(seatData[1]);
+                string rdata = seatData[0];
+
+                RoomSeat roomSeat =  db.RoomSeats
+                    .Include(r => r.seat)
+                    .Where(r =>
+                       r.seat.column == cdata &&
+                       r.seat.row == rdata
+                    ).FirstOrDefault();
+
+                if (roomSeat != null)
+                {
+                    roomSeat.status = (roomSeat.status == 1) ? 2 : 1;
+                    db.Entry(roomSeat).State = EntityState.Modified;
+                    db.SaveChanges();
+                    roomSeats.Add(roomSeat);
+                }
             }
 
-            db.Tickets.Add(ticket);
-            await db.SaveChangesAsync();
+            Debug.WriteLine("Tickets: " + JsonConvert.SerializeObject(ticket));
 
-            return CreatedAtRoute("DefaultApi", new { id = ticket.ticketID }, ticket);
+            foreach (RoomSeat roomseat in roomSeats)
+            {
+                tickets.Add(new Ticket() {
+                    createAT = DateTime.UtcNow,
+                    functionID = ticket.functionID,
+                    priceID = ticket.priceID,
+                    roomSeatID = roomseat.roomSeatID,
+                    userID = 1002
+                });
+            }
+
+            Debug.WriteLine("Tickets: "+JsonConvert.SerializeObject(tickets));
+
+            try
+            {
+                db.Tickets.AddRange(tickets);
+                db.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("ERROR: "+e.Message);
+            }
+            return CreatedAtRoute("DefaultApi", new { id = tickets.FirstOrDefault().ticketID }, tickets.FirstOrDefault());
         }
 
         // DELETE: api/Tickets/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
         [ResponseType(typeof(Ticket))]
         public async Task<IHttpActionResult> DeleteTicket(int id)
         {

@@ -4,11 +4,6 @@ namespace ApiCatchFilms.Models
 {
     public class ApiCatchFilmsContext : DbContext
     {
-        public ApiCatchFilmsContext() : base("name=ApiCatchFilmsContext")
-        {
-            this.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
-        }
-
         public System.Data.Entity.DbSet<ApiCatchFilms.Models.Function> Functions { get; set; }
         public System.Data.Entity.DbSet<ApiCatchFilms.Models.Movie> Movies { get; set; }
         public System.Data.Entity.DbSet<ApiCatchFilms.Models.Price> Prices { get; set; }

@@ -29,7 +29,11 @@ namespace ApiCatchFilms.Controllers
             Function function = await db.Functions.Include(f => f.movie)
                 .Include(f => f.price).Include(f => f.room)
                 .FirstOrDefaultAsync(f => f.functionID == id);
-
+            if (function.room != null)
+            {
+                function.room.seatAvalaibles = db.RoomSeats.Where(rs=> rs.roomID == function.roomID && rs.status == 1).Count();
+                function.room.seatNotAvalaibles = db.RoomSeats.Where(rs => rs.roomID == function.roomID && rs.status == 2).Count();
+            }
             if (function == null)
             {
                 return NotFound();
@@ -100,6 +104,18 @@ namespace ApiCatchFilms.Controllers
         [ResponseType(typeof(Function))]
         public async Task<IHttpActionResult> PostFunction(Function function)
         {
+            if (function.priceID > 0)
+            {
+                function.price = null;
+            }
+            if (function.movieID > 0)
+            {
+                function.movie = null;
+            }
+            if (function.roomID > 0)
+            {
+                function.room = null;
+            }
             //Se valida que el usuario no haya ingresado un valor existente en la base de datos
             if (function.price != null && function.priceID == 0)
             {
@@ -118,12 +134,8 @@ namespace ApiCatchFilms.Controllers
                 if (price == null ) { return StatusCode(HttpStatusCode.NotAcceptable); }
                 function.priceID = price.priceID;
             }
-            
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             Debug.WriteLine("Función: " + JsonConvert.SerializeObject(function));
+
             db.Functions.Add(function);
             await db.SaveChangesAsync();
             return CreatedAtRoute("DefaultApi", new { id = function.functionID }, function);

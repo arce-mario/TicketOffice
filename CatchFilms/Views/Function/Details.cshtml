@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Detalles de la función";
+    string baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
     float rating = @Model.movie.rating;
     float porcent = (rating * 100) / 5;
 }
@@ -22,7 +23,7 @@
             <!--Información de la pelicula-->
             <div class="row">
                 <div class="col-md-6" style="max-height: 400px;">
-                    <figure class="movie-poster"><img src="~/Content/dummy/slide-1.jpg" alt="#"></figure>
+                    <figure class="movie-poster"><img src="~/Content/images/@((Model.movie.coverURL != null)? Model.movie.coverURL : "placeholder.jpg")" alt="#"></figure>
                 </div>
                 <div class="col-md-6">
                     <h2 class="movie-title">@Model.movie.name</h2>
@@ -39,7 +40,7 @@
                             </div>
                         </li>
                         <li><strong>Duración:</strong> @Model.movie.time</li>
-                        <li><strong>Premier:</strong> @Model.time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"))</li>
+                        <li><strong>Fecha de la función:</strong> @Model.time.ToString("dddd, MMMM dd, yyyy", new CultureInfo("es-ES"))</li>
                         <li><strong>Categoria:</strong> @Model.movie.classification</li>
                     </ul>
                 </div>
@@ -47,15 +48,152 @@
             <!--Información de la sala-->
             <div class="row">
                 <div class="col-md-12">
-
+                    <label style="font-size: 1.3em; font-weight: bold; margin-bottom: 20px;">Sala destinada para esta función</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="card" style="margin-bottom: 5px;">
+                        <div class="card-body">
+                            <div class="pull-left">
+                                <h4 class="card-title">Locación: Sala @Model.room.number</h4>
+                                <p class="card-text"><strong>Descripción: </strong> @Model.room.description</p>
+                            </div>
+                            <div class="pull-right" style="padding-top:10px;">
+                                <label class="card-link rounded bg-success text-light small" style="padding: 4px;">Asientos dispinibles: @Model.room.seatAvalaibles</label>
+                                <label class="card-link rounded bg-danger text-light small" style="padding: 4px;">Asientos reservados: @Model.room.seatNotAvalaibles</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--Información de lo precio del ticket-->
             <div class="row">
                 <div class="col-md-12">
-
+                    <br />
+                    <label style="font-size: 1.3em; font-weight: bold; margin-bottom: 20px;">Información sobre el precio de los tickets</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label><strong>Comprar tickets para esta función</strong></label>
+                            <p class="text-info">Defina la cantidad a adquirir por categoría</p>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Tercera edad</label>
+                            <div class="form-group">
+                                <input id="oldManPrice" type="number" name="oldManPrice" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Niños</label>
+                            <div class="form-group">
+                                <input  id="childPrice"  type="number" name="childPrice" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Adultos</label>
+                            <div class="form-group">
+                                <input id="adultPrice" name="adultPrice" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Costo</label>
+                            <div class="form-group">
+                                <input id="totalPrice" type="number" class="form-control" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label><strong>Precio por categoría</strong></label>
+                            <p class="text-danger">Los valores reflejados en la tabla ya incluyen iva</p>
+                        </div>
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Tercera edad</th>
+                                        <th>Niños</th>
+                                        <th>Adultos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="priceOldMan">C$ @Model.price.oldManPrice</td>
+                                        <td id="priceChild">C$ @Model.price.childPrice</td>
+                                        <td id="priceAdult">C$ @Model.price.adultPrice</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="send_information()">Comprar tickets</button>
+                        <a href="@Url.Action("billboard","movie")" class="btn btn-success">Volver a la cartelera</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var oldManPrice = @Model.price.oldManPrice;
+    var childPrice = @Model.price.childPrice;
+    var adultPrice = @Model.price.adultPrice;
+
+    $(document).ready(function () {
+        $("#oldManPrice").keyup(function () {
+            defineTotalCost();
+            console.log("Funciona 1 !!!");
+        });
+
+        $("#childPrice").keyup(function () {
+            defineTotalCost();
+            console.log("Funciona 2 !!!");
+        });
+
+        $("#adultPrice").keyup(function () {
+            defineTotalCost();
+            console.log("Funciona 3 !!!");
+        });
+    });
+
+    function defineTotalCost() {
+        var old_man_price = $("#oldManPrice").val();
+        var child_price = $("#childPrice").val();
+        var adult_price = $("#adultPrice").val();
+        var total = 0.0;
+
+        console.log(old_man_price+"/"+child_price+"/"+adult_price);
+
+        if (old_man_price != "") {
+            total = parseFloat(old_man_price) * oldManPrice;
+        }
+
+        if (child_price != "") {
+            total = total + (parseFloat(child_price) * childPrice);
+        }
+
+        if (adult_price != "") {
+            total = total + (parseFloat(adult_price) * adultPrice);
+        }
+        $('#totalPrice').val(total.toFixed(2));
+    }
+
+    function send_information() {
+        var data = {
+            "cantAdult": $("#adultPrice").val(),
+            "cantChildPrice": $("#childPrice").val(),
+            "cantOldMan": $("#oldManPrice").val()
+        }
+        url = "@(baseUrl)seat/buyTickets?id=@Model.room.roomID&data=" + JSON.stringify(data);
+        window.location.href = url;
+    }
+
+</script>

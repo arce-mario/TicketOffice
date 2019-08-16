@@ -193,6 +193,7 @@
     <Content Include="Content\images\placeholder.jpg" />
     <Content Include="Content\images\select%402x.png" />
     <Content Include="Content\images\select.png" />
+    <Content Include="Content\images\thumb-1.jpg" />
     <Content Include="Img\babss.jpg" />
     <Content Include="Img\cole.jpg" />
     <Content Include="Img\sele.jpg" />
@@ -224,11 +225,14 @@
     <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\SeatController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CatalogType.cs" />
     <Compile Include="Models\Function.cs" />
+    <Compile Include="Models\Info.cs" />
+    <Compile Include="Models\InfoTickets.cs" />
     <Compile Include="Models\LoginUser.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Price.cs" />
@@ -256,8 +260,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Public\SelectSeats.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Login\SignUp.cshtml" />
     <Content Include="Views\Login\SignIn.cshtml" />
     <Content Include="Views\Movie\Billboard.cshtml" />
@@ -269,9 +272,12 @@
     <Content Include="Views\Room\Create.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Room\Index.cshtml" />
-    <Content Include="Views\Room\Details.cshtml" />
-    <Content Include="Views\Function\ProfileUser.cshtml" />
+    <Content Include="Views\Login\ProfileUser.cshtml" />
     <Content Include="Views\Movie\Edit.cshtml" />
+    <Content Include="Views\Movie\Index.cshtml" />
+    <Content Include="Views\Error\InternalServerError.cshtml" />
+    <Content Include="Views\Room\Edit.cshtml" />
+    <Content Include="Views\Seat\SeatsTickets.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -281,7 +287,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Users\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

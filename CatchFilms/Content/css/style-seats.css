@@ -116,10 +116,11 @@ div.seatCharts-legend {
 ul.seatCharts-legendList {
 	padding-left: 0px;
 	}
-.seatCharts-legendItem{
-	margin-top: 10px;
-	line-height: 2;
-	}
+.seatCharts-legendItem {
+    margin-top: 10px;
+    line-height: 2;
+    list-style: none;
+}
 span.seatCharts-legendDescription {
 	margin-left: 5px;
 	line-height: 30px;
@@ -150,11 +151,15 @@ span.seatCharts-legendDescription {
     -ms-transition: 0.5s all;
 }
 #selected-seats {
-	max-height: 84px;
-	overflow-y: auto;
-	overflow-x: none;
-	width: 200px;
-	}
+    max-height: 111px;
+    margin-top: 15px;
+    padding: 5px;
+    border-radius: 3px 3px 3px 3px;
+    min-height: 109px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ccc;
+}
 #selected-seats li{
     border: 1px solid #d3d3d3;
     background: #f7f7f7;
@@ -165,7 +170,6 @@ span.seatCharts-legendDescription {
     color: #000;
     font-weight: 600;
     padding: 6px 11px;
-    width: 50%;
 	}
 .scrollbar {
     overflow-y: scroll;
