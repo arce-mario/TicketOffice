@@ -49,6 +49,11 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 HttpResponseMessage res = await client.GetAsync("api/movies");
 
                 if (res.IsSuccessStatusCode)

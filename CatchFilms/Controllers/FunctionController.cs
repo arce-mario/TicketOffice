@@ -19,7 +19,6 @@ namespace CatchFilms.Controllers
             Function function = null;
             using (var client = new HttpClient())
             {
-                if (Session["sessionData"] == null) { return RedirectToAction("Unauthorized", "error"); }
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 if (Session["userAutentication"] != null)
                 {
