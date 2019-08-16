@@ -13,7 +13,7 @@ using ApiCatchFilms.Models;
 
 namespace ApiCatchFilms.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class RoomSeatsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
@@ -23,8 +23,7 @@ namespace ApiCatchFilms.Controllers
         {
             return db.RoomSeats.Include(r => r.seat);
         }
-
-        // GET: api/RoomSeats/5
+        
         [ResponseType(typeof(RoomSeat))]
         public async Task<IHttpActionResult> GetRoomSeat(int id)
         {
@@ -36,9 +35,7 @@ namespace ApiCatchFilms.Controllers
 
             return Ok(roomSeat);
         }
-
-        // PUT: api/RoomSeats/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutRoomSeat(int id, RoomSeat roomSeat)
         {
@@ -72,9 +69,7 @@ namespace ApiCatchFilms.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        // POST: api/RoomSeats
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        
         [ResponseType(typeof(RoomSeat))]
         public async Task<IHttpActionResult> PostRoomSeat(RoomSeat roomSeat)
         {
@@ -88,9 +83,7 @@ namespace ApiCatchFilms.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = roomSeat.roomSeatID }, roomSeat);
         }
-
-        // DELETE: api/RoomSeats/5
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        
         [ResponseType(typeof(RoomSeat))]
         public async Task<IHttpActionResult> DeleteRoomSeat(int id)
         {

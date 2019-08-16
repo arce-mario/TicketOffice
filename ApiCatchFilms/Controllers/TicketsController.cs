@@ -13,19 +13,16 @@ using System.Diagnostics;
 
 namespace ApiCatchFilms.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class TicketsController : ApiController
     {
         private ApiCatchFilmsContext db = new ApiCatchFilmsContext();
-
-        // GET: api/Tickets
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
+        
         public IQueryable<Ticket> GetTickets()
         {
             return db.Tickets.Include(t => t.price).Include(t => t.user);
         }
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
-        // GET: api/Tickets/5
+        
         [ResponseType(typeof(Ticket))]
         public async Task<IHttpActionResult> GetTicket(int id)
         {
@@ -37,9 +34,7 @@ namespace ApiCatchFilms.Controllers
 
             return Ok(ticket);
         }
-
-        // PUT: api/Tickets/5
-        [ResponseType(typeof(void))]
+        
         public async Task<IHttpActionResult> PutTicket(int id, Ticket ticket)
         {
             if (!ModelState.IsValid)

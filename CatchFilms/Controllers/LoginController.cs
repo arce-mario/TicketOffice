@@ -108,7 +108,6 @@ namespace CatchFilms.Controllers
                     user = readTask.Result;
 
                 }
-                Debug.WriteLine(result.StatusCode + "holis");
             }
 
             return View(user);
@@ -147,13 +146,8 @@ namespace CatchFilms.Controllers
 
                     if (res.IsSuccessStatusCode)
                     {
-                        return RedirectToAction("index", "home");
+                        return RedirectToAction("signin", "login");
                     }
-                    else if (res.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        return RedirectToAction("unauthorized", "error");
-                    }
-
                     Debug.WriteLine("ERROR: " + res.StatusCode);
                 }
                 catch (Exception e)

@@ -118,7 +118,7 @@ namespace CatchFilms.Controllers
         public ActionResult Edit(int id)
         {
             validationAuntentication(1);
-
+            ViewBag.InfoMessage = TempData["InfoMessage"];
             Function function = null;
             using (var client = new HttpClient())
             {
@@ -149,11 +149,17 @@ namespace CatchFilms.Controllers
                 Debug.WriteLine("Registro: " + JsonConvert.SerializeObject(function));
 
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync($"api/functions/{function.functionID}", function);
                 putTask.Wait();
                 var result = putTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
+                    TempData["InfoMessage"] = "Datos modificados correctamente";
                     return RedirectToAction("Edit");
                 }
                 Debug.WriteLine("Codigo de error: " + result.StatusCode);

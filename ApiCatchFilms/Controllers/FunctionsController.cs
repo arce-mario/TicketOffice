@@ -64,8 +64,8 @@ namespace ApiCatchFilms.Controllers
                 .Include(f => f.price).Include(f => f.room)
                 .Where(f => (f.movieID == movieID && f.time >= DateTime.UtcNow));
         }
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
-        // PUT: api/Functions/5
+
+        [Authorize]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutFunction(int id, Function function)
         {
@@ -100,7 +100,7 @@ namespace ApiCatchFilms.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Functions
+        [Authorize]
         [ResponseType(typeof(Function))]
         public async Task<IHttpActionResult> PostFunction(Function function)
         {
@@ -141,9 +141,8 @@ namespace ApiCatchFilms.Controllers
             return CreatedAtRoute("DefaultApi", new { id = function.functionID }, function);
         }
 
-        // DELETE: api/Functions/5
+        [Authorize]
         [ResponseType(typeof(Function))]
-        [Authorize(Roles = LoginController.ADMIN_ROL)]
         public async Task<IHttpActionResult> DeleteFunction(int id)
         {
             Function function = await db.Functions.FindAsync(id);
