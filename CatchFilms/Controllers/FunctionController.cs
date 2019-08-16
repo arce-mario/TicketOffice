@@ -123,7 +123,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync(String.Concat("api/functions/", id));
                 responseTask.Wait();
 
@@ -149,6 +153,11 @@ namespace CatchFilms.Controllers
                 Debug.WriteLine("Registro: " + JsonConvert.SerializeObject(function));
 
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync($"api/functions/{function.functionID}", function);
                 putTask.Wait();
                 var result = putTask.Result;

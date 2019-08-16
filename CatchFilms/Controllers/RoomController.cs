@@ -26,6 +26,11 @@ namespace CatchFilms.Controllers
                     client.BaseAddress = new Uri(LoginController.BaseUrl);
                     client.DefaultRequestHeaders.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
                     HttpResponseMessage res = await client.GetAsync(String.Concat("api/rooms?name=", name));
 
                     if (res.IsSuccessStatusCode)
@@ -47,6 +52,11 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 HttpResponseMessage res = await client.GetAsync("api/rooms");
 
                 if (res.IsSuccessStatusCode)
@@ -69,6 +79,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync($"api/rooms/{id}");
                 var result = responseTask.Result;
 
@@ -119,6 +134,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync(uri, room);
                 putTask.Wait();
                 var result = putTask.Result;
@@ -165,7 +185,11 @@ namespace CatchFilms.Controllers
                 try
                 {
                     client.BaseAddress = new Uri(LoginController.BaseUrl);
-
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
                     if (Session["userAutentication"] != null)
                     {
                         client.DefaultRequestHeaders.Authorization = new
@@ -205,6 +229,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var deleteTask = client.DeleteAsync($"api/rooms/{id}");
                 deleteTask.Wait();
 

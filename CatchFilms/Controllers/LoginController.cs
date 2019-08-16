@@ -46,6 +46,11 @@ namespace CatchFilms.Controllers
                 try
                 {
                     client.BaseAddress = new Uri(BaseUrl);
+                    if (Session["userAutentication"] != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new
+                            AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                    }
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     
                     var response = await client.PostAsJsonAsync("api/login", loginUser);
@@ -97,6 +102,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync(String.Concat("api/users/", sessionData.userID));
                 responseTask.Wait();
 

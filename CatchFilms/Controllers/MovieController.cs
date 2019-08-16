@@ -27,6 +27,11 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 HttpResponseMessage res = await client.GetAsync("api/movies?opc=1");
 
                 if (res.IsSuccessStatusCode)
@@ -73,6 +78,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync($"api/movies/{id}");
                 var result = responseTask.Result;
 
@@ -156,6 +166,11 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 HttpResponseMessage res = await client.GetAsync(String.Concat("api/movies?movie=",movie));
 
                 if (res.IsSuccessStatusCode)
@@ -174,6 +189,11 @@ namespace CatchFilms.Controllers
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 HttpResponseMessage res = await client.GetAsync(String.Concat("api/movies?name=",name));
 
                 if (res.IsSuccessStatusCode)
@@ -196,6 +216,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync($"api/movies/{id}?opc=1");
                 var result = responseTask.Result;
 
@@ -241,6 +266,11 @@ namespace CatchFilms.Controllers
                 Debug.WriteLine("Registro: "+JsonConvert.SerializeObject(movie));
 
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync($"api/movies/{movie.movieID}", movie);
                 putTask.Wait();
                 var result = putTask.Result;
@@ -261,6 +291,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var deleteTask = client.DeleteAsync($"api/movies/{id}");
                 deleteTask.Wait();
 

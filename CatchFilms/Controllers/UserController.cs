@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Mvc;
 
 namespace CatchFilms.Controllers
@@ -23,7 +24,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
-
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var responseTask = client.GetAsync("api/users/" + id.ToString());
                 responseTask.Wait();
 
@@ -57,6 +62,11 @@ namespace CatchFilms.Controllers
                 Debug.WriteLine("Registro: " + JsonConvert.SerializeObject(user));
 
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync($"api/users/{user.userID}", user);
                 putTask.Wait();
                 var result = putTask.Result;
@@ -77,6 +87,11 @@ namespace CatchFilms.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(LoginController.BaseUrl);
+                if (Session["userAutentication"] != null)
+                {
+                    client.DefaultRequestHeaders.Authorization = new
+                        AuthenticationHeaderValue("Bearer", Session["userAutentication"].ToString());
+                }
                 var putTask = client.PutAsJsonAsync($"api/apiCatchFilms/{Users.userID}", Users);
                 putTask.Wait();
 
