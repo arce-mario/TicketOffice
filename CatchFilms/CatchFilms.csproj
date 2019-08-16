@@ -198,6 +198,7 @@
     <Compile Include="Controllers\MovieController.cs" />
     <Compile Include="Controllers\PublicController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -246,6 +247,8 @@
     <Content Include="Views\Room\Details.cshtml" />
     <Content Include="Views\Function\ProfileUser.cshtml" />
     <Content Include="Views\Movie\Edit.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\View.cshtml" />
     <Content Include="Views\Function\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
